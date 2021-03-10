@@ -18,7 +18,7 @@ createConnection()
 
     app.use("/tg", router);
 
-    app.use(bot.webhookCallback(SECRET_PATH));
+    app.use(SECRET_PATH, (req, res) => bot.handleUpdate(req.body, res));
 
     app.listen(port, () => {
       console.log(`http://localhost:${port}`);
