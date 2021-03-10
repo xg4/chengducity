@@ -1,5 +1,6 @@
 import cors from "cors";
 import express from "express";
+import morgan from "morgan";
 import "reflect-metadata";
 import { createConnection } from "typeorm";
 import { bot } from "./bot";
@@ -13,8 +14,9 @@ createConnection()
     const app = express();
     app.use(cors());
     app.use(express.json());
+    app.use(morgan("tiny"));
 
-    app.use(router);
+    app.use("/tg", router);
 
     app.use(bot.webhookCallback(SECRET_PATH));
 
