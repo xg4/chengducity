@@ -16,7 +16,7 @@ createConnection()
     app.use(express.json());
     app.use(morgan("tiny"));
 
-    app.use("/tg", router);
+    app.use(router);
 
     app.use(SECRET_PATH, (req, res) => bot.handleUpdate(req.body, res));
 

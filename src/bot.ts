@@ -1,4 +1,5 @@
 import { Telegraf } from "telegraf";
+import pkg from "../package.json";
 import { BOT_TOKEN, SECRET_PATH, WEBHOOK } from "./config";
 import { userController } from "./controllers";
 
@@ -16,7 +17,7 @@ bot.command("image", (ctx) =>
   ctx.replyWithPhoto({ url: "https://picsum.photos/200/300/?random" })
 );
 
-bot.help((ctx) => ctx.reply(`For more info, see: `));
+bot.help((ctx) => ctx.reply(`For more info, see: ${pkg.homepage}`));
 
 const commands = [
   {

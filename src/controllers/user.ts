@@ -13,10 +13,7 @@ export async function token(ctx: Context) {
   try {
     const user = await userRepository.findOne({ telegram_chat_id });
     if (user) {
-      ctx.reply(`Your token is now:
-  
-  ${user.token}`);
-
+      ctx.reply(`Your token is now: ${user.token}`);
       return;
     }
 
@@ -28,9 +25,7 @@ export async function token(ctx: Context) {
     });
     await userRepository.save(newUser);
 
-    ctx.reply(`Your token is now:
-  
-  ${token}`);
+    ctx.reply(`Your token is now: ${token}`);
   } catch (err) {
     ctx.reply(`${ERROR_MSG}\n${err}`);
   }
@@ -70,7 +65,7 @@ export async function revoke(ctx: Context) {
     }
 
     await userRepository.remove(user);
-    ctx.reply(`Your current token is: ${user.token}`);
+    ctx.reply("Done, revoke successfully");
   } catch (err) {
     ctx.reply(`${ERROR_MSG}\n${err}`);
   }
