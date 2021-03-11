@@ -1,17 +1,14 @@
 import { Context } from "telegraf";
-import { getRepository } from "typeorm";
 import { v4 } from "uuid";
-import { User } from "../entity/User";
+import { User } from "../models";
 
 const ERROR_MSG = "Something wrong. Please contact xingor4@gmail.com.";
 
 export async function token(ctx: Context) {
   const telegram_chat_id = ctx.chat?.id;
 
-  const userRepository = getRepository(User);
-
   try {
-    const user = await userRepository.findOne({ telegram_chat_id });
+    const user = await User.findOne({ telegram_chat_id });
     if (user) {
       ctx.reply(`Your token is already there: ${user.token}`);
       return;
@@ -19,11 +16,11 @@ export async function token(ctx: Context) {
 
     // generate new token
     const token = v4();
-    const newUser = userRepository.create({
+    const newUser = User.create({
       telegram_chat_id,
       token,
     });
-    await userRepository.save(newUser);
+    await newUser.save();
 
     ctx.reply(`Your token is now: ${token}`);
   } catch (err) {
@@ -34,9 +31,8 @@ export async function token(ctx: Context) {
 export async function show(ctx: Context) {
   const telegram_chat_id = ctx.chat?.id;
 
-  const userRepository = getRepository(User);
   try {
-    const user = await userRepository.findOne({
+    const user = await User.findOne({
       telegram_chat_id,
     });
 
@@ -54,9 +50,8 @@ export async function show(ctx: Context) {
 export async function revoke(ctx: Context) {
   const telegram_chat_id = ctx.chat?.id;
 
-  const userRepository = getRepository(User);
   try {
-    const user = await userRepository.findOne({
+    const user = await User.findOne({
       telegram_chat_id,
     });
     if (!user) {
@@ -64,7 +59,7 @@ export async function revoke(ctx: Context) {
       return;
     }
 
-    await userRepository.remove(user);
+    await user.remove();
     ctx.reply("Done, revoke successfully");
   } catch (err) {
     ctx.reply(`${ERROR_MSG}\n${err}`);

@@ -1,9 +1,7 @@
 import { Request, Response } from "express";
 import { ParseMode } from "typegram";
-import { getRepository } from "typeorm";
 import { bot } from "../bot";
-import { Message } from "../entity/Message";
-import { User } from "../entity/User";
+import { Message, User } from "../models";
 
 interface PushMessage {
   token: string;
@@ -14,9 +12,7 @@ interface PushMessage {
 export async function send(req: Request, res: Response) {
   const { token, content, type } = req.body as PushMessage;
 
-  const userRepository = getRepository(User);
-
-  const user = await userRepository.findOne({ token });
+  const user = await User.findOne({ token });
 
   if (!user) {
     res.json({
@@ -30,13 +26,12 @@ export async function send(req: Request, res: Response) {
   try {
     await bot.telegram.sendMessage(chatId, content, { parse_mode: type });
 
-    const msgRepository = getRepository(Message);
-    const msg = msgRepository.create({
+    const msg = Message.create({
       telegram_chat_id: chatId,
       content,
       type,
     });
-    await msgRepository.save(msg);
+    await msg.save();
   } catch (err) {
     res.json({
       code: 500,
