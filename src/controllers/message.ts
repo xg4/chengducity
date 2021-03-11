@@ -36,7 +36,7 @@ export async function send(req: Request, res: Response) {
       content,
       type,
     });
-    await msgRepository.manager.save(msg);
+    await msgRepository.save(msg);
   } catch (err) {
     res.json({
       code: 500,

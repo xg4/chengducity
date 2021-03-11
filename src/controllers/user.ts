@@ -6,14 +6,14 @@ import { User } from "../entity/User";
 const ERROR_MSG = "Something wrong. Please contact xingor4@gmail.com.";
 
 export async function token(ctx: Context) {
-  const telegram_chat_id = ctx.chat.id;
+  const telegram_chat_id = ctx.chat?.id;
 
   const userRepository = getRepository(User);
 
   try {
     const user = await userRepository.findOne({ telegram_chat_id });
     if (user) {
-      ctx.reply(`Your token is now: ${user.token}`);
+      ctx.reply(`Your token is already there: ${user.token}`);
       return;
     }
 
@@ -32,7 +32,7 @@ export async function token(ctx: Context) {
 }
 
 export async function show(ctx: Context) {
-  const telegram_chat_id = ctx.chat.id;
+  const telegram_chat_id = ctx.chat?.id;
 
   const userRepository = getRepository(User);
   try {
@@ -52,7 +52,7 @@ export async function show(ctx: Context) {
 }
 
 export async function revoke(ctx: Context) {
-  const telegram_chat_id = ctx.chat.id;
+  const telegram_chat_id = ctx.chat?.id;
 
   const userRepository = getRepository(User);
   try {
