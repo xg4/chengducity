@@ -1,11 +1,11 @@
 import { bot } from "./bot";
 import { userController } from "./controllers";
 
-bot.start(userController.generate);
+bot.start(userController.token);
 
-bot.help((ctx) => ctx.reply(`For more info, see: `));
+bot.command("token", userController.token);
 
-bot.command("generate", userController.generate);
+bot.command("revoke", userController.revoke);
 
 bot.command("show", userController.show);
 
@@ -13,14 +13,20 @@ bot.command("image", (ctx) =>
   ctx.replyWithPhoto({ url: "https://picsum.photos/200/300/?random" })
 );
 
+bot.help((ctx) => ctx.reply(`For more info, see: `));
+
 const commands = [
   {
-    command: "generate",
-    description: "generate your push id",
+    command: "token",
+    description: "generate authorization token",
+  },
+  {
+    command: "revoke",
+    description: "revoke access token",
   },
   {
     command: "show",
-    description: "show your current push id",
+    description: "show your current token",
   },
   {
     command: "image",

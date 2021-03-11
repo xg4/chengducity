@@ -17,7 +17,7 @@ export class User {
   telegram_chat_id: number;
 
   @Column()
-  push_id: string;
+  token: string;
 
   @CreateDateColumn()
   created_at: Date;

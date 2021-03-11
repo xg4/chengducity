@@ -6,22 +6,22 @@ import { Message } from "../entity/Message";
 import { User } from "../entity/User";
 
 interface PushMessage {
-  push_id: string;
+  token: string;
   content: string;
   type?: ParseMode;
 }
 
 export async function send(req: Request, res: Response) {
-  const { push_id, content, type } = req.body as PushMessage;
+  const { token, content, type } = req.body as PushMessage;
 
   const userRepository = getRepository(User);
 
-  const user = await userRepository.findOne({ push_id });
+  const user = await userRepository.findOne({ token });
 
   if (!user) {
     res.json({
       code: 404,
-      msg: `no such push id: ${push_id}`,
+      msg: `no such token: ${token}`,
     });
     return;
   }

@@ -5,7 +5,7 @@ import { User } from "../entity/User";
 
 const ERROR_MSG = "Something wrong. Please contact xingor4@gmail.com.";
 
-export async function generate(ctx: Context) {
+export async function token(ctx: Context) {
   const telegram_chat_id = ctx.chat.id;
 
   const userRepository = getRepository(User);
@@ -13,40 +13,65 @@ export async function generate(ctx: Context) {
   try {
     const user = await userRepository.findOne({ telegram_chat_id });
     if (user) {
-      ctx.reply(`Your push id is now:
+      ctx.reply(`Your token is now:
   
-  ${user.push_id}`);
+  ${user.token}`);
 
       return;
     }
+
+    // generate new token
+    const token = v4();
+    const newUser = userRepository.create({
+      telegram_chat_id,
+      token,
+    });
+    await userRepository.save(newUser);
+
+    ctx.reply(`Your token is now:
+  
+  ${token}`);
   } catch (err) {
     ctx.reply(`${ERROR_MSG}\n${err}`);
-    return;
   }
-
-  const pushId = v4();
-  const newUser = userRepository.create({
-    telegram_chat_id,
-    push_id: pushId,
-  });
-  await userRepository.manager.save(newUser);
-
-  ctx.reply(`Your push id is now:
-  
-  ${pushId}`);
 }
 
 export async function show(ctx: Context) {
   const telegram_chat_id = ctx.chat.id;
 
   const userRepository = getRepository(User);
-  const user = await userRepository.findOne({
-    telegram_chat_id,
-  });
+  try {
+    const user = await userRepository.findOne({
+      telegram_chat_id,
+    });
 
-  if (!user) {
-    ctx.reply(`You don't have any push id`);
+    if (!user) {
+      ctx.reply(`You don't have any token`);
+      return;
+    }
+
+    ctx.reply(`Your current token is: ${user.token}`);
+  } catch (err) {
+    ctx.reply(`${ERROR_MSG}\n${err}`);
   }
+}
 
-  ctx.reply(`Your current push id is: ${user.push_id}`);
+export async function revoke(ctx: Context) {
+  const telegram_chat_id = ctx.chat.id;
+
+  const userRepository = getRepository(User);
+  try {
+    const user = await userRepository.findOne({
+      telegram_chat_id,
+    });
+    if (!user) {
+      ctx.reply(`You don't have any token`);
+      return;
+    }
+
+    await userRepository.remove(user);
+    ctx.reply(`Your current token is: ${user.token}`);
+  } catch (err) {
+    ctx.reply(`${ERROR_MSG}\n${err}`);
+  }
 }
