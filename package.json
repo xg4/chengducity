@@ -16,8 +16,9 @@
    "main": "index.js",
    "scripts": {
       "start": "ts-node src/app.ts",
-      "db:generate": "npx typeorm migration:generate -n",
-      "db:migrate": "npx typeorm migration:run"
+      "typeorm": "npx ts-node ./node_modules/.bin/typeorm",
+      "db:generate": "yarn typeorm migration:generate -n",
+      "db:migrate": "yarn typeorm migration:run"
    },
    "dependencies": {
       "cors": "^2.8.5",
