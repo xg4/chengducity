@@ -1,22 +1,22 @@
 {
-  "name": "telegbot",
+  "name": "chengducity",
   "version": "0.1.0",
   "description": "telegram bot",
   "keywords": [],
-  "homepage": "https://github.com/xg4/telegbot#readme",
+  "homepage": "https://github.com/xg4/chengducity#readme",
   "bugs": {
-    "url": "https://github.com/xg4/telegbot/issues"
+    "url": "https://github.com/xg4/chengducity/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xg4/telegbot.git"
+    "url": "git+https://github.com/xg4/chengducity.git"
   },
   "license": "MIT",
   "author": "xg4 <xingor4@gmail.com>",
   "main": "index.js",
   "scripts": {
     "start": "ts-node src/app.ts",
-    "typeorm": "npx ts-node ./node_modules/.bin/typeorm",
+    "typeorm": "ts-node ./node_modules/.bin/typeorm",
     "db:generate": "yarn typeorm migration:generate -n",
     "db:migrate": "yarn typeorm migration:run"
   },
