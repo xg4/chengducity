@@ -15,10 +15,11 @@
   "author": "xg4 <xingor4@gmail.com>",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/app.ts",
+    "serve": "ts-node src/app.ts",
     "typeorm": "ts-node ./node_modules/.bin/typeorm",
     "db:generate": "yarn typeorm migration:generate -p -n",
-    "db:migrate": "yarn typeorm migration:run"
+    "db:migrate": "yarn typeorm migration:run",
+    "start": "yarn db:migrate && yarn serve"
   },
   "dependencies": {
     "@types/cors": "^2.8.10",

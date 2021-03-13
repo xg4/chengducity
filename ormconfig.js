@@ -4,9 +4,11 @@ module.exports = {
   url: process.env.DATABASE_URL,
   synchronize: false,
   logging: false,
-  ssl: {
-    rejectUnauthorized: false,
-  },
+  ssl: process.env.IS_HEROKU
+    ? {
+        rejectUnauthorized: false,
+      }
+    : false,
   entities: ["src/models/**/*.ts"],
   migrations: ["src/migration/**/*.ts"],
   subscribers: ["src/subscriber/**/*.ts"],
