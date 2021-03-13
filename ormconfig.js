@@ -4,6 +4,9 @@ module.exports = {
   url: process.env.DATABASE_URL,
   synchronize: false,
   logging: false,
+  ssl: {
+    rejectUnauthorized: false,
+  },
   entities: ["src/models/**/*.ts"],
   migrations: ["src/migration/**/*.ts"],
   subscribers: ["src/subscriber/**/*.ts"],
