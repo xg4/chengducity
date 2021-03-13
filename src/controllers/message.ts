@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { ParseMode } from "typegram";
 import { bot } from "../bot";
-import { Message, User } from "../models";
+import { User } from "../models";
 
 interface PushMessage {
   token: string;
@@ -25,13 +25,6 @@ export async function send(req: Request, res: Response) {
   const chatId = user.telegram_chat_id;
   try {
     await bot.telegram.sendMessage(chatId, content, { parse_mode: type });
-
-    const msg = Message.create({
-      telegram_chat_id: chatId,
-      content,
-      type,
-    });
-    await msg.save();
   } catch (err) {
     res.json({
       code: 500,
