@@ -3,7 +3,7 @@ module.exports = {
   type: "postgres",
   url: process.env.DATABASE_URL,
   synchronize: false,
-  logging: false,
+  logging: process.env.NODE_ENV !== "production",
   ssl: process.env.IS_HEROKU
     ? {
         rejectUnauthorized: false,

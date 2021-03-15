@@ -1,8 +1,27 @@
+import { Request, Response } from "express";
 import { Context } from "telegraf";
 import { v4 } from "uuid";
 import { User } from "../models";
 
 const ERROR_MSG = "Something wrong. Please contact xingor4@gmail.com.";
+
+export async function users(_req: Request, res: Response) {
+  const pageSize = 10;
+  const pageIndex = 1;
+
+  const users = await User.find({
+    order: {
+      created_at: "DESC",
+    },
+    take: pageSize,
+    skip: (pageIndex - 1) * pageSize,
+  });
+
+  res.json({
+    code: 0,
+    data: [],
+  });
+}
 
 export async function token(ctx: Context) {
   const telegram_chat_id = ctx.chat?.id;

@@ -10,8 +10,9 @@ import { SECRET_PATH } from "./config";
 import { router } from "./routes";
 
 const port = process.env.PORT || 3000;
+const dev = process.env.NODE_ENV !== "production";
 
-const app = next({ dev: true, dir: join(__dirname, "../client") });
+const app = next({ dev, dir: join(__dirname, "../client") });
 const handle = app.getRequestHandler();
 
 async function main() {

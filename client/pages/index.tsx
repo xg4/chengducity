@@ -4,10 +4,10 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>Next App</title>
+        <title>Chengdu City</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>Hello World</main>
+      <main>Hello Everyone, Welcome to Chengdu City</main>
     </div>
   );
 }
