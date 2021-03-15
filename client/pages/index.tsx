@@ -7,7 +7,12 @@ export default function Home() {
         <title>Chengdu City</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>Hello Everyone, Welcome to Chengdu City</main>
+      <main>
+        <span className="ml-2 text-red-600">
+          Hello Everyone, Welcome to{' '}
+          <span className="font-bold">Chengdu City</span>
+        </span>
+      </main>
     </div>
   );
 }
