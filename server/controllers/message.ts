@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
-import { ParseMode } from "typegram";
-import { bot } from "../bot";
-import { User } from "../models";
+import { Request, Response } from 'express';
+import { ParseMode } from 'typegram';
+import { bot } from '../bot';
+import { User } from '../models';
 
 interface PushMessage {
   token: string;

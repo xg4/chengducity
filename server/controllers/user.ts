@@ -1,9 +1,9 @@
-import { Request, Response } from "express";
-import { Context } from "telegraf";
-import { v4 } from "uuid";
-import { User } from "../models";
+import { Request, Response } from 'express';
+import { Context } from 'telegraf';
+import { v4 } from 'uuid';
+import { User } from '../models';
 
-const ERROR_MSG = "Something wrong. Please contact xingor4@gmail.com.";
+const ERROR_MSG = 'Something wrong. Please contact xingor4@gmail.com.';
 
 export async function users(_req: Request, res: Response) {
   const pageSize = 10;
@@ -11,7 +11,7 @@ export async function users(_req: Request, res: Response) {
 
   const users = await User.find({
     order: {
-      created_at: "DESC",
+      created_at: 'DESC',
     },
     take: pageSize,
     skip: (pageIndex - 1) * pageSize,
@@ -79,7 +79,7 @@ export async function revoke(ctx: Context) {
     }
 
     await user.remove();
-    ctx.reply("Done, revoke successfully");
+    ctx.reply('Done, revoke successfully');
   } catch (err) {
     ctx.reply(`${ERROR_MSG}\n${err}`);
   }
