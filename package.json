@@ -15,7 +15,7 @@
   "author": "xg4 <xingor4@gmail.com>",
   "main": "index.js",
   "scripts": {
-    "serve": "ts-node src/app.ts",
+    "serve": "ts-node server/app.ts",
     "typeorm": "ts-node ./node_modules/.bin/typeorm",
     "db:generate": "yarn typeorm migration:generate -p -n",
     "db:migrate": "yarn typeorm migration:run",
