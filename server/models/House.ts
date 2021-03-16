@@ -26,6 +26,6 @@ export class House extends BaseEntity {
   @Column()
   status: string;
 
-  @Column()
+  @Column({ select: false })
   source: string;
 }
