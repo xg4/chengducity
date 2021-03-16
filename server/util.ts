@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import { House } from './models';
 
 export function md5(value: string) {
   const hash = crypto.createHash('md5');
@@ -7,4 +8,21 @@ export function md5(value: string) {
 
 export function delay(num: number) {
   return new Promise((resolve) => setTimeout(resolve, num));
+}
+
+export function composeContent({
+  region,
+  name,
+  details,
+  number,
+  starts_at,
+  ends_at,
+  status,
+}: House) {
+  return `
+  ${region} ${name} ${status}\n
+  ${starts_at} ~ ${ends_at}\n
+  ${details}\n
+  ${number}套\n
+  `.trim();
 }

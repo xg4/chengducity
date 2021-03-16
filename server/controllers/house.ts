@@ -1,22 +1,24 @@
 import { Request, Response } from 'express';
+import { Context } from 'telegraf';
+import { v4 } from 'uuid';
 import { bot, take } from '../../server/lib';
 import { House, User } from '../../server/models';
+import { composeContent } from '../../server/util';
 
-function composeContent({
-  region,
-  name,
-  details,
-  number,
-  starts_at,
-  ends_at,
-  status,
-}: House) {
-  return `
-  ${region} ${name} ${status}\n
-  ${starts_at} ~ ${ends_at}\n
-  ${details}\n
-  ${number}套\n
-  `.trim();
+const ERROR_MSG = 'Something wrong. Please contact xingor4@gmail.com.';
+
+export async function now(ctx: Context) {
+  try {
+    const houses = await House.find({
+      status: '正在报名',
+    });
+
+    await Promise.all(houses.map((house) => ctx.reply(composeContent(house))));
+  } catch (err) {
+    const errId = v4();
+    console.log(errId, err);
+    await ctx.reply(`${ERROR_MSG}\n${errId}`);
+  }
 }
 
 export async function pull(req: Request, res: Response) {

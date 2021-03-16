@@ -63,8 +63,10 @@ export async function spider(pageNo: number) {
     trList.push(tdList);
   });
 
-  if (trList[0][14] !== '查看') {
-    throw new Error('[spider]: Source data has changed');
+  // 数据可能发生改变
+  if (trList[0] && trList[0][14] !== '查看') {
+    console.log('[spider]: Source data has changed');
+    throw new Error('Source data has changed');
   }
 
   return trList;

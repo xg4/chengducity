@@ -1,7 +1,7 @@
 import { Telegraf } from 'telegraf';
 import pkg from '../../package.json';
 import { BOT_TOKEN, SECRET_PATH, WEBHOOK } from '../config';
-import { userController } from '../controllers';
+import { houseController, userController } from '../controllers';
 
 export const bot = new Telegraf(BOT_TOKEN);
 
@@ -13,6 +13,8 @@ bot.command('revoke', userController.revoke);
 
 bot.command('show', userController.show);
 
+bot.command('now', houseController.now);
+
 bot.command('image', (ctx) =>
   ctx.replyWithPhoto({ url: 'https://picsum.photos/200/300/?random' }),
 );
@@ -20,6 +22,10 @@ bot.command('image', (ctx) =>
 bot.help((ctx) => ctx.reply(`For more info, see: ${pkg.homepage}`));
 
 const commands = [
+  {
+    command: 'now',
+    description: '获取正在报名的房源信息',
+  },
   {
     command: 'token',
     description: 'generate authorization token',

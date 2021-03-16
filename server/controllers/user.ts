@@ -29,7 +29,7 @@ export async function token(ctx: Context) {
   try {
     const user = await User.findOne({ telegram_chat_id });
     if (user) {
-      ctx.reply(`Your token is already there: ${user.token}`);
+      await ctx.reply(`Your token is already there: ${user.token}`);
       return;
     }
 
@@ -41,9 +41,11 @@ export async function token(ctx: Context) {
     });
     await newUser.save();
 
-    ctx.reply(`Your token is now: ${token}`);
+    await ctx.reply(`Your token is now: ${token}`);
   } catch (err) {
-    ctx.reply(`${ERROR_MSG}\n${err}`);
+    const errId = v4();
+    console.log(errId, err);
+    await ctx.reply(`${ERROR_MSG}\n${errId}`);
   }
 }
 
@@ -56,13 +58,15 @@ export async function show(ctx: Context) {
     });
 
     if (!user) {
-      ctx.reply(`You don't have any token`);
+      await ctx.reply(`You don't have any token`);
       return;
     }
 
-    ctx.reply(`Your current token is: ${user.token}`);
+    await ctx.reply(`Your current token is: ${user.token}`);
   } catch (err) {
-    ctx.reply(`${ERROR_MSG}\n${err}`);
+    const errId = v4();
+    console.log(errId, err);
+    await ctx.reply(`${ERROR_MSG}\n${errId}`);
   }
 }
 
@@ -74,13 +78,15 @@ export async function revoke(ctx: Context) {
       telegram_chat_id,
     });
     if (!user) {
-      ctx.reply(`You don't have any token`);
+      await ctx.reply(`You don't have any token`);
       return;
     }
 
     await user.remove();
-    ctx.reply('Done, revoke successfully');
+    await ctx.reply('Done, revoke successfully');
   } catch (err) {
-    ctx.reply(`${ERROR_MSG}\n${err}`);
+    const errId = v4();
+    console.log(errId, err);
+    await ctx.reply(`${ERROR_MSG}\n${errId}`);
   }
 }
