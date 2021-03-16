@@ -16,7 +16,7 @@ const oneDayOfJob = new CronJob('0 0 2 * * *', async () => {
   await task(1, true);
   console.log('[oneDayOfJob] end ', new Date().toISOString());
 });
-const oneHourOfJob = new CronJob('0 42 * * * *', async () => {
+const oneHourOfJob = new CronJob('0 2 * * * *', async () => {
   console.log('[oneHourOfJob] start ', new Date().toISOString());
   await task();
   console.log('[oneHourOfJob] end ', new Date().toISOString());

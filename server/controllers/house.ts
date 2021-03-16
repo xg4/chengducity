@@ -21,6 +21,27 @@ export async function now(ctx: Context) {
   }
 }
 
+export async function all(req: Request, res: Response) {
+  try {
+    const houses = await House.find({
+      order: {
+        ends_at: 'DESC',
+      },
+    });
+
+    res.json({
+      code: 0,
+      data: houses,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      code: 500,
+      msg: 'Internal Server Error',
+    });
+  }
+}
+
 export async function pull(req: Request, res: Response) {
   const { page } = req.body;
   try {

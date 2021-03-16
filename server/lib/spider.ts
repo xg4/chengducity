@@ -1,13 +1,16 @@
 import cheerio from 'cheerio';
 import fetch from 'node-fetch';
-import { House } from '../models';
-import { delay } from '../util';
+import { House, User } from '../models';
+import { composeContent, delay } from '../util';
+import { bot } from './bot';
 
 const pageSize = 10;
 
 // 定时任务
 export async function task(page = 1, isAll = false) {
+  console.log('[spider] page ', page);
   const list = await take(page);
+  const users = await User.find();
 
   await Promise.all(
     list.map(async (item) => {
@@ -18,7 +21,14 @@ export async function task(page = 1, isAll = false) {
       const house = House.create(item);
 
       if (savedHouses?.status !== house.status) {
-        // TODO: push telegram message
+        await Promise.all(
+          users.map((user) =>
+            bot.telegram.sendMessage(
+              user.telegram_chat_id,
+              composeContent(house),
+            ),
+          ),
+        );
       }
 
       await house.save();
@@ -30,7 +40,7 @@ export async function task(page = 1, isAll = false) {
   }
 
   await delay(1 * 1e3);
-  await task(page + 1);
+  await task(page + 1, isAll);
 }
 
 export async function take(page: number) {

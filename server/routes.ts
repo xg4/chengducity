@@ -12,3 +12,5 @@ router.post('/push', messageController.push);
 router.get('/users', userController.users);
 
 router.post('/pull', houseController.pull);
+
+router.get('/houses', houseController.all);

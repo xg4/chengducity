@@ -19,10 +19,9 @@ export function composeContent({
   ends_at,
   status,
 }: House) {
-  return `
-  ${region} ${name} ${status}\n
-  ${starts_at} ~ ${ends_at}\n
-  ${details}\n
-  ${number}套\n
-  `.trim();
+  return (
+    `${region} ${name} ${status}\n\n` +
+    `${starts_at} ~ ${ends_at}\n\n` +
+    `${details}\n\n${number}套`
+  );
 }

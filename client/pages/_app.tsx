@@ -1,5 +1,6 @@
+import 'antd/dist/antd.css';
 import { AppProps } from 'next/app';
-import '../css/tailwind.css';
+// import '../css/tailwind.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return <Component {...pageProps}></Component>;
