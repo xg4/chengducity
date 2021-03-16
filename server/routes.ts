@@ -1,8 +1,14 @@
 import express from 'express';
-import { messageController, userController } from './controllers';
+import {
+  houseController,
+  messageController,
+  userController,
+} from './controllers';
 
 export const router = express.Router();
 
-router.post('/push', messageController.send);
+router.post('/push', messageController.push);
 
 router.get('/users', userController.users);
+
+router.post('/pull', houseController.pull);

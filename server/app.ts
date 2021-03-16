@@ -1,13 +1,20 @@
 import cors from 'cors';
+import { CronJob } from 'cron';
 import express from 'express';
 import morgan from 'morgan';
 import next from 'next';
 import { join } from 'path';
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
-import { bot } from './bot';
 import { SECRET_PATH } from './config';
+import { bot, task } from './lib';
 import { router } from './routes';
+
+// 定时任务
+const oneDayOfJob = new CronJob('0 0 2 * * *', () => task(1, true));
+const oneHourOfJob = new CronJob('0 0 2 * * *', () => task());
+oneDayOfJob.start();
+oneHourOfJob.start();
 
 const port = process.env.PORT || 3000;
 const dev = process.env.NODE_ENV !== 'production';

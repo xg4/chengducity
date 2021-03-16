@@ -1,7 +1,7 @@
 import { Telegraf } from 'telegraf';
-import pkg from '../package.json';
-import { BOT_TOKEN, SECRET_PATH, WEBHOOK } from './config';
-import { userController } from './controllers';
+import pkg from '../../package.json';
+import { BOT_TOKEN, SECRET_PATH, WEBHOOK } from '../config';
+import { userController } from '../controllers';
 
 export const bot = new Telegraf(BOT_TOKEN);
 
