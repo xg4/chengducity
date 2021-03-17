@@ -16,10 +16,7 @@ export async function push(req: Request, res: Response) {
     const user = await User.findOne({ token });
 
     if (!user) {
-      res.status(404).json({
-        code: 404,
-        msg: `no such token: ${token}`,
-      });
+      res.status(404).json(`no such token: ${token}`);
       return;
     }
 
@@ -27,14 +24,9 @@ export async function push(req: Request, res: Response) {
 
     await bot.telegram.sendMessage(chatId, content, { parse_mode: type });
 
-    res.json({
-      code: 0,
-    });
+    res.json('success');
   } catch (err) {
     console.log(err);
-    res.status(500).json({
-      code: 500,
-      msg: 'Internal Server Error',
-    });
+    res.status(500).json('Internal Server Error');
   }
 }

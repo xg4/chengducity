@@ -29,16 +29,10 @@ export async function all(req: Request, res: Response) {
       },
     });
 
-    res.json({
-      code: 0,
-      data: houses,
-    });
+    res.json(houses);
   } catch (err) {
     console.log(err);
-    res.status(500).json({
-      code: 500,
-      msg: 'Internal Server Error',
-    });
+    res.status(500).json('Internal Server Error');
   }
 }
 
@@ -71,15 +65,9 @@ export async function pull(req: Request, res: Response) {
       }),
     );
 
-    res.json({
-      code: 0,
-      data: houses,
-    });
+    res.json(houses);
   } catch (err) {
     console.log(err);
-    res.status(500).json({
-      code: 500,
-      msg: 'Internal Server Error',
-    });
+    res.status(500).json('Internal Server Error');
   }
 }
