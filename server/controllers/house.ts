@@ -1,5 +1,7 @@
+import dayjs from 'dayjs';
 import { Request, Response } from 'express';
 import { Context } from 'telegraf';
+import { MoreThan } from 'typeorm';
 import { v4 } from 'uuid';
 import { bot, take } from '../../server/lib';
 import { House, User } from '../../server/models';
@@ -10,7 +12,9 @@ const ERROR_MSG = 'Something wrong. Please contact xingor4@gmail.com.';
 export async function now(ctx: Context) {
   try {
     const houses = await House.find({
-      status: '正在报名',
+      ends_at: MoreThan(
+        dayjs().tz('Asia/Shanghai').format('YYYY-MM-DD HH:mm:ss'),
+      ),
     });
 
     await Promise.all(houses.map((house) => ctx.reply(composeContent(house))));
@@ -27,6 +31,7 @@ export async function all(req: Request, res: Response) {
       order: {
         ends_at: 'DESC',
       },
+      cache: true,
     });
 
     res.json(houses);

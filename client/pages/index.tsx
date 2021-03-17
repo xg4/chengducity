@@ -1,11 +1,28 @@
 import { Card, Col, Row, Table } from 'antd';
+import { InferGetStaticPropsType } from 'next';
 import Head from 'next/head';
 import useSWR from 'swr';
 import { useMetrics } from '../hooks';
 import { House } from '../types';
 
-export default function Home() {
-  const { data, error } = useSWR<House[], Error>('/houses');
+export async function getStaticProps() {
+  const result = await fetch('https://chengducity.herokuapp.com/houses');
+
+  const data: House[] = await result.json();
+
+  return {
+    props: {
+      houses: data,
+    },
+  };
+}
+
+export default function Home({
+  houses,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
+  const { data, error } = useSWR<House[], Error>('/houses', {
+    initialData: houses,
+  });
 
   const loading = !data && !error;
 

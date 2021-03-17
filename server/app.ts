@@ -1,5 +1,8 @@
 import cors from 'cors';
 import { CronJob } from 'cron';
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 import express from 'express';
 import morgan from 'morgan';
 import next from 'next';
@@ -9,6 +12,9 @@ import { createConnection } from 'typeorm';
 import { SECRET_PATH } from './config';
 import { bot, task } from './lib';
 import { router } from './routes';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 // 定时任务
 const oneDayOfJob = new CronJob('0 0 2 * * *', async () => {

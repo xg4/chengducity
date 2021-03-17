@@ -11,8 +11,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <SWRConfig
       value={{
-        fetcher: async (url) => {
-          const res = await fetch(url);
+        fetcher: async (url: RequestInfo, options?: RequestInit) => {
+          const res = await fetch(url, options);
 
           if (!res.ok) {
             const msg = await res.json();
