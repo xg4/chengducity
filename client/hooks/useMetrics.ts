@@ -33,6 +33,8 @@ export function useMetrics(data: House[]) {
     const prevMonth = currentDate.subtract(1, 'month');
     const currentMonthData = monthOfData[currentDate.format('YYYY-MM')] ?? [];
     const prevMonthData = monthOfData[prevMonth.format('YYYY-MM')] ?? [];
+
+    const regionOfData = groupBy(data, 'region');
     return {
       currentYearData,
       prevYearData,
@@ -43,6 +45,7 @@ export function useMetrics(data: House[]) {
       yearOfData,
       monthOfData,
       quarterOfData,
+      regionOfData,
     };
   }, [key]);
 }

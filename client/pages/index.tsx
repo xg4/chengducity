@@ -1,9 +1,13 @@
 import { Card, Col, Row, Table } from 'antd';
 import { InferGetStaticPropsType } from 'next';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import useSWR from 'swr';
 import { useMetrics } from '../hooks';
 import { House } from '../types';
+
+const MonthChart = dynamic(() => import('../components/MonthChart'));
+const RegionChart = dynamic(() => import('../components/RegionChart'));
 
 export async function getStaticProps() {
   const result = await fetch('https://chengducity.herokuapp.com/houses');
@@ -62,6 +66,8 @@ export default function Home({
     prevMonthData,
     prevQuarterData,
     prevYearData,
+    monthOfData,
+    regionOfData,
   } = useMetrics(dataSource);
 
   const list = [
@@ -127,7 +133,7 @@ export default function Home({
               );
               const diffData = currentData - prevData;
               return (
-                <Col key={item.title} span={8}>
+                <Col key={item.title} span={6}>
                   <Card title={item.title} extra={item.extra}>
                     <div
                       style={{
@@ -181,7 +187,25 @@ export default function Home({
                 </Col>
               );
             })}
+
+            <Col span={6}>
+              <Card title="汇总">
+                <div>楼盘数：{dataSource.length}</div>
+                <div>
+                  房源数：
+                  {dataSource.reduce((acc, cur) => acc + Number(cur.number), 0)}
+                </div>
+              </Card>
+            </Col>
           </Row>
+        </div>
+
+        <div style={{ padding: 20 }}>
+          <MonthChart monthOfData={monthOfData}></MonthChart>
+        </div>
+
+        <div style={{ padding: 20 }}>
+          <RegionChart regionOfData={regionOfData}></RegionChart>
         </div>
 
         <div style={{ padding: 20 }}>
