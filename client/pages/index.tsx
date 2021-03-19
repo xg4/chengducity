@@ -201,11 +201,15 @@ export default function Home({
         </div>
 
         <div style={{ padding: 20 }}>
-          <MonthChart monthOfData={monthOfData}></MonthChart>
+          <div style={{ padding: 20, backgroundColor: '#fff' }}>
+            <MonthChart monthOfData={monthOfData}></MonthChart>
+          </div>
         </div>
 
         <div style={{ padding: 20 }}>
-          <RegionChart regionOfData={regionOfData}></RegionChart>
+          <div style={{ padding: 20, backgroundColor: '#fff' }}>
+            <RegionChart regionOfData={regionOfData}></RegionChart>
+          </div>
         </div>
 
         <div style={{ padding: 20 }}>

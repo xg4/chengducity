@@ -1,4 +1,4 @@
-import { Chart, Interval, Tooltip } from 'bizcharts';
+import { Chart, Interaction, Interval, Tooltip } from 'bizcharts';
 import { Dictionary, flatten, reverse, sortBy } from 'lodash';
 import { House } from '../types';
 
@@ -40,6 +40,7 @@ export default function RegionChart({ regionOfData }: RegionChartProps) {
           color="name"
         />
         <Tooltip shared />
+        <Interaction type="active-region" />
       </Chart>
     </div>
   );
