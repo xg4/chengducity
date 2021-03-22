@@ -9,17 +9,17 @@ import { House } from '../types';
 const MonthChart = dynamic(() => import('../components/MonthChart'));
 const RegionChart = dynamic(() => import('../components/RegionChart'));
 
-export async function getStaticProps() {
+export const getStaticProps = async () => {
   const result = await fetch('https://chengducity.herokuapp.com/houses');
 
-  const data: House[] = await result.json();
+  const houses: House[] = await result.json();
 
   return {
     props: {
-      houses: data,
+      houses,
     },
   };
-}
+};
 
 export default function Home({
   houses,
