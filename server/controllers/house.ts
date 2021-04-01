@@ -1,7 +1,8 @@
 import dayjs from 'dayjs';
 import { Request, Response } from 'express';
+import { groupBy } from 'lodash';
 import { Context } from 'telegraf';
-import { MoreThan } from 'typeorm';
+import { Between, MoreThan } from 'typeorm';
 import { v4 } from 'uuid';
 import { bot, take } from '../../server/lib';
 import { House, User } from '../../server/models';
@@ -12,9 +13,7 @@ const ERROR_MSG = 'Something wrong. Please contact xingor4@gmail.com.';
 export async function now(ctx: Context) {
   try {
     const houses = await House.find({
-      ends_at: MoreThan(
-        dayjs().tz('Asia/Shanghai').format('YYYY-MM-DD HH:mm:ss'),
-      ),
+      ends_at: MoreThan(dayjs().format('YYYY-MM-DD HH:mm:ss')),
     });
 
     await Promise.all(houses.map((house) => ctx.reply(composeContent(house))));
@@ -22,6 +21,38 @@ export async function now(ctx: Context) {
     const errId = v4();
     console.log(errId, err);
     await ctx.reply(`${ERROR_MSG}\n${errId}`);
+  }
+}
+
+export async function years(req: Request, res: Response) {
+  try {
+    const houses = await House.find({ select: ['ends_at'], cache: true });
+    const years = groupBy(houses, (item) => dayjs(item.ends_at).get('year'));
+    res.json(Object.keys(years));
+  } catch (err) {
+    console.log(err);
+    res.status(500).json('Internal Server Error');
+  }
+}
+
+export async function year(req: Request, res: Response) {
+  const { year } = req.params;
+
+  try {
+    const date = dayjs(year);
+    const houses = await House.find({
+      where: {
+        ends_at: Between(
+          date.format('YYYY-MM-DD HH:mm:ss'),
+          date.add(1, 'year').format('YYYY-MM-DD HH:mm:ss'),
+        ),
+      },
+      cache: true,
+    });
+    res.json(houses);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json('Internal Server Error');
   }
 }
 

@@ -7,7 +7,7 @@ import { House } from '../types';
 export function useDataSource(initialData?: House[]) {
   const dispatch = useDispatch();
 
-  const { data } = useSWR<House[], Error>('/houses', {
+  const { data } = useSWR<House[], Error>('/api/v1/houses', {
     initialData,
   });
 

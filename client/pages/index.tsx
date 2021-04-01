@@ -15,7 +15,7 @@ const RegionChart = dynamic(() => import('../components/RegionChart'), {
 });
 
 export const getStaticProps = async () => {
-  const result = await fetch('https://chengducity.herokuapp.com/houses');
+  const result = await fetch('https://chengducity.herokuapp.com/api/v1/houses');
 
   const houses: House[] = await result.json();
 
@@ -109,7 +109,7 @@ export default function Home({
             </Menu.Item>
             {years.map((year) => (
               <Menu.Item key={year}>
-                <Link href={`/years/${year}`}>
+                <Link href={`/year/${year}`}>
                   <a>{year}年</a>
                 </Link>
               </Menu.Item>

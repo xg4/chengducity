@@ -2,15 +2,15 @@ import { Chart, Interaction, Interval, Line, Point, Tooltip } from 'bizcharts';
 import dayjs from 'dayjs';
 import { groupBy } from 'lodash';
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
+import Head from 'next/head';
 import { House } from '../../types';
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const result = await fetch('https://chengducity.herokuapp.com/houses');
-  const data: House[] = await result.json();
-  const yearOfData = groupBy(data, (item) => dayjs(item.ends_at).year());
+  const result = await fetch('https://chengducity.herokuapp.com/api/v1/years');
+  const years: string[] = await result.json();
 
-  const paths = Object.keys(yearOfData).map((key) => ({
-    params: { years: key },
+  const paths = years.map((year) => ({
+    params: { year },
   }));
 
   return {
@@ -20,13 +20,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const result = await fetch('https://chengducity.herokuapp.com/houses');
-  const data: House[] = await result.json();
-  const yearOfData = groupBy(data, (item) => dayjs(item.ends_at).year());
+  const year = params?.year as string;
+  const result = await fetch(
+    `https://chengducity.herokuapp.com/api/v1/year/${year}`,
+  );
+  const houses: House[] = await result.json();
 
-  const year = params?.years as string;
-
-  const houses = yearOfData[year];
   return {
     props: {
       houses,
@@ -74,10 +73,12 @@ function YearlyChart({ houses }: { houses: House[] }) {
 export default function Years({
   houses,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  console.log(houses);
   return (
     <div>
-      Yearly Summary
+      <Head>
+        <title>成都房源信息 - Chengdu City</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <YearlyChart houses={houses}></YearlyChart>
     </div>
   );

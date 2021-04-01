@@ -1,8 +1,5 @@
 import cors from 'cors';
 import { CronJob } from 'cron';
-import dayjs from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
 import express from 'express';
 import morgan from 'morgan';
 import next from 'next';
@@ -12,9 +9,6 @@ import { createConnection } from 'typeorm';
 import { SECRET_PATH } from './config';
 import { bot, task } from './lib';
 import { router } from './routes';
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
 
 // 定时任务
 const oneDayOfJob = new CronJob('0 0 2 * * *', async () => {
@@ -44,12 +38,11 @@ async function main() {
   const server = express();
 
   // middleware
-  server.use(cors());
   server.use(express.json());
   server.use(morgan('tiny', { skip: (req) => req.url.startsWith('/_next') }));
 
   // router
-  server.use(router);
+  server.use('/api/v1', cors(), router);
   // telegram bot webhook, telegraf bot
   server.use(SECRET_PATH, (req, res) => bot.handleUpdate(req.body, res));
 
