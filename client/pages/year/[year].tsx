@@ -2,11 +2,19 @@ import { Chart, Interaction, Interval, Line, Point, Tooltip } from 'bizcharts';
 import dayjs from 'dayjs';
 import { groupBy } from 'lodash';
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
-import Head from 'next/head';
+import Layout from '../../components/Layout';
 import { House } from '../../types';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const result = await fetch('https://chengducity.herokuapp.com/api/v1/years');
+
+  if (!result.ok) {
+    return {
+      paths: [],
+      fallback: false,
+    };
+  }
+
   const years: string[] = await result.json();
 
   const paths = years.map((year) => ({
@@ -24,6 +32,15 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const result = await fetch(
     `https://chengducity.herokuapp.com/api/v1/year/${year}`,
   );
+
+  if (!result.ok) {
+    return {
+      props: {
+        houses: [],
+      },
+    };
+  }
+
   const houses: House[] = await result.json();
 
   return {
@@ -74,12 +91,8 @@ export default function Years({
   houses,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
-    <>
-      <Head>
-        <title>成都房源信息 - Chengdu City</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <Layout>
       <YearlyChart houses={houses}></YearlyChart>
-    </>
+    </Layout>
   );
 }

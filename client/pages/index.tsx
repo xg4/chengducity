@@ -1,8 +1,7 @@
 import { Card, Col, Row } from 'antd';
 import { InferGetStaticPropsType } from 'next';
 import dynamic from 'next/dynamic';
-import Head from 'next/head';
-import Nav from '../components/Nav';
+import Layout from '../components/Layout';
 import TableCard from '../components/TableCard';
 import { useDataSource, useMetrics } from '../hooks';
 import { House } from '../types';
@@ -13,6 +12,14 @@ const ChartCard = dynamic(() => import('../components/ChartCard'), {
 
 export const getStaticProps = async () => {
   const result = await fetch('https://chengducity.herokuapp.com/api/v1/houses');
+
+  if (!result.ok) {
+    return {
+      props: {
+        houses: [],
+      },
+    };
+  }
 
   const houses: House[] = await result.json();
 
@@ -37,7 +44,6 @@ export default function Home({
     prevYearData,
     monthOfData,
     regionOfData,
-    yearOfData,
   } = useMetrics(dataSource);
 
   const boxList = [
@@ -61,21 +67,9 @@ export default function Home({
     },
   ];
 
-  const tabs = [{ name: '首页', path: '/' }].concat(
-    Object.keys(yearOfData)
-      .reverse()
-      .map((year) => ({ name: `${year}年`, path: `/year/${year}` })),
-  );
-
   return (
-    <>
-      <Head>
-        <title>成都房源信息 - Chengdu City</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main className="bg-gray-100">
-        <Nav links={tabs}></Nav>
-
+    <Layout className="bg-gray-100">
+      <main>
         <div className="m-5">
           <Row gutter={16}>
             {boxList.map((item) => {
@@ -146,6 +140,6 @@ export default function Home({
 
         <TableCard className="mx-5" dataSource={dataSource}></TableCard>
       </main>
-    </>
+    </Layout>
   );
 }

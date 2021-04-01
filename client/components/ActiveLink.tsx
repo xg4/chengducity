@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import Link, { LinkProps } from 'next/link';
 import { useRouter } from 'next/router';
 import React, { Children } from 'react';
@@ -14,7 +15,7 @@ const ActiveLink = ({ children, activeClassName, ...props }: ActiveLink) => {
 
   const className =
     asPath === props.href || asPath === props.as
-      ? `${childClassName} ${activeClassName}`.trim()
+      ? clsx(childClassName, activeClassName)
       : childClassName;
 
   return (
