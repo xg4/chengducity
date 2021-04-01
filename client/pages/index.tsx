@@ -1,16 +1,13 @@
-import { Card, Col, Menu, Row, Table } from 'antd';
-import { reverse, sortBy } from 'lodash';
+import { Card, Col, Row } from 'antd';
 import { InferGetStaticPropsType } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import Link from 'next/link';
+import Nav from '../components/Nav';
+import TableCard from '../components/TableCard';
 import { useDataSource, useMetrics } from '../hooks';
 import { House } from '../types';
 
-const MonthChart = dynamic(() => import('../components/MonthChart'), {
-  ssr: false,
-});
-const RegionChart = dynamic(() => import('../components/RegionChart'), {
+const ChartCard = dynamic(() => import('../components/ChartCard'), {
   ssr: false,
 });
 
@@ -30,33 +27,6 @@ export default function Home({
   houses,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const { houses: dataSource } = useDataSource(houses);
-
-  const columns = [
-    {
-      title: '区域',
-      dataIndex: 'region',
-    },
-    {
-      title: '项目名称',
-      dataIndex: 'name',
-    },
-    {
-      title: '住房套数',
-      dataIndex: 'number',
-    },
-    {
-      title: '登记开始时间',
-      dataIndex: 'starts_at',
-    },
-    {
-      title: '登记结束时间',
-      dataIndex: 'ends_at',
-    },
-    {
-      title: '报名状态',
-      dataIndex: 'status',
-    },
-  ];
 
   const {
     currentMonthData,
@@ -91,32 +61,22 @@ export default function Home({
     },
   ];
 
-  const years = reverse(sortBy(Object.keys(yearOfData)));
+  const tabs = [{ name: '首页', path: '/' }].concat(
+    Object.keys(yearOfData)
+      .reverse()
+      .map((year) => ({ name: `${year}年`, path: `/year/${year}` })),
+  );
 
   return (
-    <div>
+    <>
       <Head>
         <title>成都房源信息 - Chengdu City</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main style={{ backgroundColor: '#f0f2f5' }}>
-        {
-          <Menu mode="horizontal">
-            <Menu.Item>
-              <Link href="/">
-                <a>首页</a>
-              </Link>
-            </Menu.Item>
-            {years.map((year) => (
-              <Menu.Item key={year}>
-                <Link href={`/year/${year}`}>
-                  <a>{year}年</a>
-                </Link>
-              </Menu.Item>
-            ))}
-          </Menu>
-        }
-        <div style={{ padding: 20 }}>
+      <main className="bg-gray-100">
+        <Nav links={tabs}></Nav>
+
+        <div className="m-5">
           <Row gutter={16}>
             {boxList.map((item) => {
               const currentNum = item.current.length;
@@ -135,49 +95,27 @@ export default function Home({
               return (
                 <Col key={item.title} span={6}>
                   <Card title={item.title} extra={item.extra}>
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                      }}
-                    >
+                    <div className="flex justify-between">
                       <span>楼盘数：{currentNum}</span>
 
                       <span
-                        style={
-                          diffNum < 0
-                            ? {
-                                color: 'green',
-                              }
-                            : {
-                                color: 'red',
-                              }
+                        className={
+                          diffNum < 0 ? 'text-green-500' : 'text-red-500'
                         }
                       >
                         {diffNum}
                       </span>
                     </div>
 
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                      }}
-                    >
+                    <div className="flex justify-between">
                       <span>
                         房源数：
                         {currentData}
                       </span>
 
                       <span
-                        style={
-                          diffData < 0
-                            ? {
-                                color: 'green',
-                              }
-                            : {
-                                color: 'red',
-                              }
+                        className={
+                          diffData < 0 ? 'text-green-500' : 'text-red-500'
                         }
                       >
                         {diffData}
@@ -200,29 +138,14 @@ export default function Home({
           </Row>
         </div>
 
-        <div style={{ padding: 20 }}>
-          <div style={{ padding: 20, backgroundColor: '#fff' }}>
-            <MonthChart monthOfData={monthOfData}></MonthChart>
-          </div>
-        </div>
+        <ChartCard
+          className="mx-5 mb-5"
+          monthOfData={monthOfData}
+          regionOfData={regionOfData}
+        ></ChartCard>
 
-        <div style={{ padding: 20 }}>
-          <div style={{ padding: 20, backgroundColor: '#fff' }}>
-            <RegionChart regionOfData={regionOfData}></RegionChart>
-          </div>
-        </div>
-
-        <div style={{ padding: 20 }}>
-          <Table
-            rowKey="uuid"
-            columns={columns}
-            dataSource={dataSource}
-            pagination={{
-              showSizeChanger: true,
-            }}
-          ></Table>
-        </div>
+        <TableCard className="mx-5" dataSource={dataSource}></TableCard>
       </main>
-    </div>
+    </>
   );
 }

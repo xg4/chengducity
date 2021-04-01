@@ -21,8 +21,8 @@ export default function Push() {
     message.success('发送成功');
   };
   return (
-    <div style={{ width: 400, margin: '0 auto' }}>
-      <div className="mx-auto max-w-md shadow mt-32 bg-gray-100 p-4">
+    <div className="mx-auto max-w-2xl flex">
+      <div className="shadow bg-gray-100 p-4 mr-5">
         <p className="text-red-600">
           Hello Everyone, welcome to{' '}
           <span className="font-bold">Chengdu City Bot</span>
@@ -34,7 +34,7 @@ export default function Push() {
             href="https://t.me/chengducitybot"
           >
             t.me/chengducitybot
-          </a>
+          </a>{' '}
           to get Telegram bot
         </p>
         <p>
@@ -42,7 +42,7 @@ export default function Push() {
           the token on Telegram bot.
         </p>
       </div>
-      <Form layout="vertical" form={form} onFinish={onSubmit}>
+      <Form className="w-5/6" layout="vertical" form={form} onFinish={onSubmit}>
         <Form.Item
           label="token"
           name="token"

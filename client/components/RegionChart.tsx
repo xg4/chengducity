@@ -1,12 +1,16 @@
 import { Chart, Interaction, Interval, Tooltip } from 'bizcharts';
-import { Dictionary, flatten, reverse, sortBy } from 'lodash';
+import { Dictionary, orderBy } from 'lodash';
 import { House } from '../types';
 
 interface RegionChartProps {
   regionOfData: Dictionary<House[]>;
+  tabKey: string;
 }
 
-export default function RegionChart({ regionOfData }: RegionChartProps) {
+export default function RegionChart({
+  regionOfData,
+  tabKey,
+}: RegionChartProps) {
   const _data = Object.entries(regionOfData).map(([region, houses]) => {
     return [
       {
@@ -22,26 +26,30 @@ export default function RegionChart({ regionOfData }: RegionChartProps) {
     ];
   });
 
-  const data = reverse(sortBy(flatten(_data), 'value'));
+  const data = orderBy(
+    _data.flat().filter((i) => i.name === tabKey),
+    'value',
+    'desc',
+  );
   return (
     <div>
-      <div style={{ textAlign: 'center', fontWeight: 'bolder' }}>
-        区域统计图
+      <div className="text-center font-bold">{tabKey} - 区域 - 统计图</div>
+      <div className="h-80">
+        <Chart padding="auto" data={data} autoFit>
+          <Interval
+            adjust={[
+              {
+                type: 'dodge',
+                marginRatio: 0,
+              },
+            ]}
+            position="region*value"
+            color="name"
+          />
+          <Tooltip shared />
+          <Interaction type="active-region" />
+        </Chart>
       </div>
-      <Chart height={300} padding="auto" data={data} autoFit>
-        <Interval
-          adjust={[
-            {
-              type: 'dodge',
-              marginRatio: 0,
-            },
-          ]}
-          position="region*value"
-          color="name"
-        />
-        <Tooltip shared />
-        <Interaction type="active-region" />
-      </Chart>
     </div>
   );
 }

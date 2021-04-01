@@ -74,12 +74,12 @@ export default function Years({
   houses,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
-    <div>
+    <>
       <Head>
         <title>成都房源信息 - Chengdu City</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <YearlyChart houses={houses}></YearlyChart>
-    </div>
+    </>
   );
 }

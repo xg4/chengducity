@@ -1,10 +1,10 @@
 import 'antd/dist/antd.css';
 import dayjs from 'dayjs';
-// import '../css/tailwind.css';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import { AppProps } from 'next/app';
 import { Provider } from 'react-redux';
 import { SWRConfig } from 'swr';
+import '../css/tailwind.css';
 import store from '../store';
 
 dayjs.extend(quarterOfYear);
