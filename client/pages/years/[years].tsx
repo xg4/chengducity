@@ -1,4 +1,4 @@
-import { Chart, Interval, Line, Point, Tooltip } from 'bizcharts';
+import { Chart, Interaction, Interval, Line, Point, Tooltip } from 'bizcharts';
 import dayjs from 'dayjs';
 import { groupBy } from 'lodash';
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
@@ -57,11 +57,6 @@ function YearlyChart({ houses }: { houses: House[] }) {
   }));
   return (
     <Chart scale={scale} autoFit height={400} data={data}>
-      {/*  如需使用单轴 
-  <Axis name="waiting" visible={true} />
-  <Axis name="people" visible={false} /> 
-  */}
-
       <Tooltip shared />
       <Interval position="month*number" color={colors[0]} />
       <Line position="month*length" color={colors[1]} size={3} shape="smooth" />
@@ -71,6 +66,7 @@ function YearlyChart({ houses }: { houses: House[] }) {
         size={3}
         shape="circle"
       />
+      <Interaction type="active-region" />
     </Chart>
   );
 }

@@ -1,13 +1,18 @@
-import { Card, Col, Row, Table } from 'antd';
+import { Card, Col, Menu, Row, Table } from 'antd';
+import { reverse, sortBy } from 'lodash';
 import { InferGetStaticPropsType } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import useSWR from 'swr';
-import { useMetrics } from '../hooks';
+import Link from 'next/link';
+import { useDataSource, useMetrics } from '../hooks';
 import { House } from '../types';
 
-const MonthChart = dynamic(() => import('../components/MonthChart'));
-const RegionChart = dynamic(() => import('../components/RegionChart'));
+const MonthChart = dynamic(() => import('../components/MonthChart'), {
+  ssr: false,
+});
+const RegionChart = dynamic(() => import('../components/RegionChart'), {
+  ssr: false,
+});
 
 export const getStaticProps = async () => {
   const result = await fetch('https://chengducity.herokuapp.com/houses');
@@ -24,13 +29,7 @@ export const getStaticProps = async () => {
 export default function Home({
   houses,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const { data, error } = useSWR<House[], Error>('/houses', {
-    initialData: houses,
-  });
-
-  const loading = !data && !error;
-
-  const dataSource = data ?? [];
+  const { houses: dataSource } = useDataSource(houses);
 
   const columns = [
     {
@@ -68,9 +67,10 @@ export default function Home({
     prevYearData,
     monthOfData,
     regionOfData,
+    yearOfData,
   } = useMetrics(dataSource);
 
-  const list = [
+  const boxList = [
     {
       title: '本月',
       extra: '相比上月',
@@ -91,6 +91,8 @@ export default function Home({
     },
   ];
 
+  const years = reverse(sortBy(Object.keys(yearOfData)));
+
   return (
     <div>
       <Head>
@@ -98,9 +100,25 @@ export default function Home({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main style={{ backgroundColor: '#f0f2f5' }}>
+        {
+          <Menu mode="horizontal">
+            <Menu.Item>
+              <Link href="/">
+                <a>首页</a>
+              </Link>
+            </Menu.Item>
+            {years.map((year) => (
+              <Menu.Item key={year}>
+                <Link href={`/years/${year}`}>
+                  <a>{year}年</a>
+                </Link>
+              </Menu.Item>
+            ))}
+          </Menu>
+        }
         <div style={{ padding: 20 }}>
           <Row gutter={16}>
-            {list.map((item) => {
+            {boxList.map((item) => {
               const currentNum = item.current.length;
               const prevNum = item.prev.length;
               const diffNum = currentNum - prevNum;
@@ -196,7 +214,6 @@ export default function Home({
 
         <div style={{ padding: 20 }}>
           <Table
-            loading={loading}
             rowKey="uuid"
             columns={columns}
             dataSource={dataSource}
