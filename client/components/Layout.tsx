@@ -9,12 +9,17 @@ interface LayoutProps {
 }
 
 export default function Layout({ className, children }: LayoutProps) {
-  const { data } = useSWR<string[], Error>('/api/v1/years');
+  const { data } = useSWR<string[], Error>('/api/v1/years', {
+    revalidateOnFocus: false,
+  });
 
   const list = data ?? [];
 
   const tabs = [{ name: '首页', path: '/' }].concat(
-    list.map((year) => ({ name: `${year}年`, path: `/year/${year}` })),
+    list
+      .map((year) => ({ name: `${year}年`, path: `/year/${year}` }))
+      .sort()
+      .reverse(),
   );
   return (
     <div className={className}>

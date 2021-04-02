@@ -50,7 +50,7 @@
     "@types/react-dom": "^17.0.2",
     "@types/react-redux": "^7.1.16",
     "@types/uuid": "^8.3.0",
-    "antd": "^4.14.0",
+    "antd": "^4.15.0",
     "bizcharts": "^4.1.9",
     "cheerio": "^1.0.0-rc.5",
     "clsx": "^1.1.1",

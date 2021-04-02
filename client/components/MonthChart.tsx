@@ -1,71 +1,11 @@
-import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
 import { Chart, LineAdvance } from 'bizcharts';
-import clsx from 'clsx';
-import { Dictionary, orderBy, sortBy } from 'lodash';
-import { useState } from 'react';
+import { Dictionary, orderBy } from 'lodash';
 import { House } from '../types';
+import Rank from './Rank';
 
 interface MonthChartProps {
   monthOfData: Dictionary<House[]>;
   tabKey: string;
-}
-
-interface RankProps {
-  className?: string;
-  dataSource: {
-    name: string;
-    month: string;
-    value: number;
-  }[];
-}
-
-function Rank({ dataSource, className }: RankProps) {
-  const [order, setOrder] = useState<'desc' | 'asc'>('desc');
-
-  return (
-    <div className={clsx(className, 'flex flex-col')}>
-      <div className="mb-2 flex justify-between items-center">
-        <span>排名：月份</span>
-
-        <Button
-          onClick={() => {
-            if (order === 'desc') {
-              setOrder('asc');
-            } else {
-              setOrder('desc');
-            }
-          }}
-          type="link"
-          icon={order === 'desc' ? <ArrowDownOutlined /> : <ArrowUpOutlined />}
-        ></Button>
-      </div>
-      <div className="overflow-auto pr-2">
-        {orderBy(dataSource, 'value', order).map((item, index) => (
-          <div
-            key={item.month}
-            className="flex justify-between items-center mb-4 text-base"
-          >
-            <span>
-              <span
-                className={clsx(
-                  'inline-flex justify-center items-center',
-                  index < 3
-                    ? 'bg-blue-500 text-gray-200'
-                    : 'bg-gray-200 text-gray-800',
-                  'rounded-full w-5 h-5 mr-4 text-sm',
-                )}
-              >
-                {index + 1}
-              </span>
-              {item.month}
-            </span>
-            <span>{item.value}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
 }
 
 export default function MonthChart({ monthOfData, tabKey }: MonthChartProps) {
@@ -81,9 +21,10 @@ export default function MonthChart({ monthOfData, tabKey }: MonthChartProps) {
       value: houses.length,
     },
   ]);
-  const data = sortBy(
+  const data = orderBy(
     _data.flat().filter((i) => i.name === tabKey),
     'month',
+    'asc',
   );
 
   return (
@@ -101,8 +42,15 @@ export default function MonthChart({ monthOfData, tabKey }: MonthChartProps) {
             />
           </Chart>
         </div>
-
-        <Rank className="w-1/5" dataSource={data}></Rank>
+        <Rank
+          className="w-1/5"
+          title="排名：月份"
+          dataSource={data.map((item) => ({
+            ...item,
+            name: item.month,
+            key: item.month,
+          }))}
+        ></Rank>
       </div>
     </div>
   );
