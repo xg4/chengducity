@@ -2,6 +2,7 @@ import { Chart, Interaction, Interval, Line, Point, Tooltip } from 'bizcharts';
 import dayjs from 'dayjs';
 import { groupBy } from 'lodash';
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
+import Head from 'next/head';
 import Layout from '../../components/Layout';
 import { House } from '../../types';
 
@@ -46,6 +47,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   return {
     props: {
       houses,
+      year,
     },
   };
 };
@@ -89,9 +91,13 @@ function YearlyChart({ houses }: { houses: House[] }) {
 
 export default function Years({
   houses,
+  year,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <Layout>
+      <Head>
+        <title>{year}年成都房源信息 - Chengdu City</title>
+      </Head>
       <YearlyChart houses={houses}></YearlyChart>
     </Layout>
   );
