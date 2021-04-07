@@ -1,7 +1,6 @@
 import dayjs from 'dayjs';
 import { groupBy } from 'lodash';
 import { useMemo } from 'react';
-import { House } from '../types';
 
 export function useMetrics(data: House[]) {
   const key = data.map((item) => item.uuid).join();

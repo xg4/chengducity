@@ -1,7 +1,6 @@
 import { Card, Divider } from 'antd';
 import { Dictionary } from 'lodash';
 import { useState } from 'react';
-import { House } from '../types';
 import MonthChart from './MonthChart';
 import RegionChart from './RegionChart';
 

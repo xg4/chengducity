@@ -1,5 +1,4 @@
 import { Card, Table } from 'antd';
-import { House } from '../types';
 
 interface TableCardProps {
   dataSource: House[];

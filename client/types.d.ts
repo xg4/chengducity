@@ -1,4 +1,4 @@
-export interface House {
+interface House {
   uuid: string;
   name: string;
   details: string;

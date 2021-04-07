@@ -17,7 +17,6 @@ import { useState } from 'react';
 import Layout from '../../components/Layout';
 import Rank from '../../components/Rank';
 import TableCard from '../../components/TableCard';
-import { House } from '../../types';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const result = await fetch('https://chengducity.herokuapp.com/api/v1/years');

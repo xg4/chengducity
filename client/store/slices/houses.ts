@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { unionBy } from 'lodash';
 import { CoreState } from '../';
-import { House } from '../../types';
 
 type HousesState = {
   houses: House[];

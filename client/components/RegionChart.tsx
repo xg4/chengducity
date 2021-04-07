@@ -1,6 +1,5 @@
 import { Chart, Interaction, Interval, Tooltip } from 'bizcharts';
 import { Dictionary, orderBy } from 'lodash';
-import { House } from '../types';
 
 interface RegionChartProps {
   regionOfData: Dictionary<House[]>;

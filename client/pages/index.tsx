@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic';
 import Layout from '../components/Layout';
 import TableCard from '../components/TableCard';
 import { useDataSource, useMetrics } from '../hooks';
-import { House } from '../types';
 
 const ChartCard = dynamic(() => import('../components/ChartCard'), {
   ssr: false,

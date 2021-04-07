@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useSWR from 'swr';
 import { addHouses, selectHouses } from '../store';
-import { House } from '../types';
 
 export function useDataSource(initialData?: House[]) {
   const dispatch = useDispatch();
