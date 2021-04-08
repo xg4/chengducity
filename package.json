@@ -16,13 +16,13 @@
   "main": "index.js",
   "scripts": {
     "typeorm": "ts-node ./node_modules/.bin/typeorm",
-    "db:generate": "yarn typeorm migration:generate -p -n",
-    "db:migrate": "yarn typeorm migration:run",
+    "db:generate": "npm run typeorm migration:generate -- -p -n",
+    "db:migrate": "npm run typeorm migration:run",
     "serve": "ts-node server/app.ts",
-    "dev": "nodemon --watch server --ext ts --exec yarn serve",
+    "dev": "nodemon --watch server --ext ts --exec npm run serve",
     "build": "next build ./client",
-    "start": "cross-env NODE_ENV=production yarn serve",
-    "heroku-postbuild": "yarn db:migrate && yarn build",
+    "start": "cross-env NODE_ENV=production npm run serve",
+    "heroku-postbuild": "npm run db:migrate && npm run build",
     "pretty": "prettier --write client/**/*.ts* server/**/*.ts"
   },
   "husky": {

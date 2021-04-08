@@ -1,4 +1,5 @@
 FROM node:alpine
+
 WORKDIR /app
 
 ENV NODE_ENV production
@@ -6,7 +7,7 @@ ENV NODE_ENV production
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 COPY . .
-RUN yarn build
+RUN npm run build
 
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001

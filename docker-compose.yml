@@ -2,22 +2,22 @@ version: '3.7'
 
 services:
   db:
-    image: postgres:11
+    image: postgres:alpine
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
-    ports:
-      - '54320:5432'
   app:
     depends_on:
       - db
     build: .
-    command: yarn start
+    command: npm run start
     working_dir: /app
     environment:
       - DB_URL=db
     volumes:
       - .:/app
+    links:
+      - db
     ports:
       - '3000:3000'
