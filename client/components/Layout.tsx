@@ -1,6 +1,5 @@
-import Head from 'next/head';
 import React from 'react';
-import useSWR from 'swr';
+import { useYearsQuery } from '../generated/graphql';
 import Nav from './Nav';
 
 interface LayoutProps {
@@ -9,11 +8,9 @@ interface LayoutProps {
 }
 
 export default function Layout({ className, children }: LayoutProps) {
-  const { data } = useSWR<string[], Error>('/api/v1/years', {
-    revalidateOnFocus: false,
-  });
+  const { data } = useYearsQuery();
 
-  const list = data ?? [];
+  const list = data?.years ?? [];
 
   const tabs = [{ name: '首页', path: '/' }].concat(
     list
@@ -23,10 +20,6 @@ export default function Layout({ className, children }: LayoutProps) {
   );
   return (
     <div className={className}>
-      <Head>
-        <title>成都房源信息 - Chengdu City</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <Nav links={tabs}></Nav>
       {children}
     </div>

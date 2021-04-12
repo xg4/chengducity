@@ -1,39 +1,17 @@
 import { Card, Col, Row } from 'antd';
-import { InferGetStaticPropsType } from 'next';
 import dynamic from 'next/dynamic';
 import Layout from '../components/Layout';
 import TableCard from '../components/TableCard';
-import { useDataSource, useMetrics } from '../hooks';
+import { useHousesQuery } from '../generated/graphql';
+import { useMetrics } from '../hooks';
 
 const ChartCard = dynamic(() => import('../components/ChartCard'), {
   ssr: false,
 });
 
-export const getStaticProps = async () => {
-  const result = await fetch('https://chengducity.herokuapp.com/api/v1/houses');
-
-  if (!result.ok) {
-    return {
-      props: {
-        houses: [],
-      },
-    };
-  }
-
-  const houses: House[] = await result.json();
-
-  return {
-    props: {
-      houses,
-    },
-  };
-};
-
-export default function Home({
-  houses,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
-  const { houses: dataSource } = useDataSource(houses);
-
+export default function Home() {
+  const { data } = useHousesQuery();
+  const dataSource = data?.houses ?? [];
   const {
     currentMonthData,
     currentQuarterData,

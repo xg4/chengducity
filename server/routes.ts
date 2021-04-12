@@ -1,15 +1,9 @@
 import express from 'express';
-import {
-  houseController,
-  messageController,
-  userController,
-} from './controllers';
+import { houseController, messageController } from './controllers';
 
 export const router = express.Router();
 
 router.post('/push', messageController.push);
-
-router.get('/users', userController.users);
 
 router.post('/pull', houseController.pull);
 

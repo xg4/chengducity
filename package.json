@@ -2,7 +2,12 @@
   "name": "chengducity",
   "version": "0.1.0",
   "description": "telegram bot",
-  "keywords": [],
+  "keywords": [
+    "chengducity",
+    "houses",
+    "telegram",
+    "bot"
+  ],
   "homepage": "https://github.com/xg4/chengducity#readme",
   "bugs": {
     "url": "https://github.com/xg4/chengducity/issues"
@@ -13,7 +18,7 @@
   },
   "license": "MIT",
   "author": "xg4 <xingor4@gmail.com>",
-  "main": "index.js",
+  "main": "server/app.ts",
   "scripts": {
     "typeorm": "ts-node ./node_modules/.bin/typeorm",
     "db:generate": "npm run typeorm migration:generate -- -p -n",
@@ -23,7 +28,8 @@
     "build": "next build ./client",
     "start": "cross-env NODE_ENV=production npm run serve",
     "heroku-postbuild": "npm run db:migrate && npm run build",
-    "pretty": "prettier --write client/**/*.ts* server/**/*.ts"
+    "pretty": "prettier --write client/**/*.ts* server/**/*.ts",
+    "gql": "graphql-codegen --config codegen.js"
   },
   "husky": {
     "hooks": {
@@ -38,6 +44,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.6.2",
+    "@apollo/client": "^3.3.14",
     "@reduxjs/toolkit": "^1.5.1",
     "@types/cors": "^2.8.10",
     "@types/cron": "^1.7.2",
@@ -50,9 +57,10 @@
     "@types/react-dom": "^17.0.3",
     "@types/react-redux": "^7.1.16",
     "@types/uuid": "^8.3.0",
-    "antd": "^4.15.0",
+    "antd": "^4.15.1",
+    "apollo-server-express": "^2.22.2",
     "bizcharts": "^4.1.9",
-    "cheerio": "^1.0.0-rc.5",
+    "cheerio": "^1.0.0-rc.6",
     "clsx": "^1.1.1",
     "cors": "^2.8.5",
     "cron": "^1.8.2",
@@ -60,6 +68,7 @@
     "dayjs": "^1.10.4",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "graphql": "^15.5.0",
     "lodash": "^4.17.21",
     "morgan": "^1.10.0",
     "next": "^10.1.3",
@@ -72,15 +81,21 @@
     "swr": "^0.5.5",
     "telegraf": "^4.3.0",
     "ts-node": "^9.1.1",
+    "type-graphql": "^1.1.1",
     "typeorm": "^0.2.32",
     "typescript": "^4.2.4",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^1.21.3",
+    "@graphql-codegen/introspection": "1.18.1",
+    "@graphql-codegen/typescript": "1.21.1",
+    "@graphql-codegen/typescript-operations": "1.17.15",
+    "@graphql-codegen/typescript-react-apollo": "2.2.3",
     "husky": "^6.0.0",
     "lint-staged": "^10.5.4",
     "nodemon": "^2.0.7",
-    "postcss": "^8.2.9",
+    "postcss": "^8.2.10",
     "postcss-preset-env": "^6.7.0",
     "prettier": "^2.2.1",
     "tailwindcss": "^2.1.1"

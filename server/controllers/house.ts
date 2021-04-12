@@ -1,28 +1,12 @@
 import dayjs from 'dayjs';
 import { Request, Response } from 'express';
 import { groupBy } from 'lodash';
-import { Context } from 'telegraf';
-import { Between, MoreThan } from 'typeorm';
-import { v4 } from 'uuid';
+import { Between } from 'typeorm';
 import { bot, take } from '../../server/lib';
 import { House, User } from '../../server/models';
 import { composeContent } from '../../server/util';
 
 const ERROR_MSG = 'Something wrong. Please contact xingor4@gmail.com.';
-
-export async function now(ctx: Context) {
-  try {
-    const houses = await House.find({
-      ends_at: MoreThan(dayjs().format('YYYY-MM-DD HH:mm:ss')),
-    });
-
-    await Promise.all(houses.map((house) => ctx.reply(composeContent(house))));
-  } catch (err) {
-    const errId = v4();
-    console.log(errId, err);
-    await ctx.reply(`${ERROR_MSG}\n${errId}`);
-  }
-}
 
 export async function years(req: Request, res: Response) {
   try {

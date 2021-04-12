@@ -11,58 +11,14 @@ import {
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { groupBy, orderBy } from 'lodash';
-import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import Layout from '../../components/Layout';
 import Rank from '../../components/Rank';
 import TableCard from '../../components/TableCard';
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  const result = await fetch('https://chengducity.herokuapp.com/api/v1/years');
-
-  if (!result.ok) {
-    return {
-      paths: [],
-      fallback: false,
-    };
-  }
-
-  const years: string[] = await result.json();
-
-  const paths = years.map((year) => ({
-    params: { year },
-  }));
-
-  return {
-    paths,
-    fallback: false,
-  };
-};
-
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const year = params?.year as string;
-  const result = await fetch(
-    `https://chengducity.herokuapp.com/api/v1/year/${year}`,
-  );
-
-  if (!result.ok) {
-    return {
-      props: {
-        houses: [],
-      },
-    };
-  }
-
-  const houses: House[] = await result.json();
-
-  return {
-    props: {
-      houses,
-      year,
-    },
-  };
-};
+import { useHousesQuery } from '../../generated/graphql';
+import { useMetrics } from '../../hooks';
 
 interface RegionCardProps {
   className?: string;
@@ -195,11 +151,13 @@ function Summary({
   );
 }
 
-export default function Years({
-  houses,
-  year,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
-  houses = orderBy(houses, 'ends_at', 'asc');
+export default function Years() {
+  const { query } = useRouter();
+  const year = query.year as string;
+  const { data } = useHousesQuery();
+  const dataSource = data?.houses ?? [];
+  const { yearOfData } = useMetrics(dataSource);
+  const houses = orderBy(yearOfData[year] ?? [], 'ends_at', 'asc');
 
   return (
     <Layout className="bg-gray-100">
