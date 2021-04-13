@@ -17,7 +17,6 @@ import { useState } from 'react';
 import Layout from '../../components/Layout';
 import Rank from '../../components/Rank';
 import TableCard from '../../components/TableCard';
-import { useHousesQuery } from '../../generated/graphql';
 import { useMetrics } from '../../hooks';
 
 interface RegionCardProps {
@@ -154,9 +153,7 @@ function Summary({
 export default function Years() {
   const { query } = useRouter();
   const year = query.year as string;
-  const { data } = useHousesQuery();
-  const dataSource = data?.houses ?? [];
-  const { yearOfData } = useMetrics(dataSource);
+  const { yearOfData } = useMetrics();
   const houses = orderBy(
     yearOfData[year] ?? [],
     ['ends_at', 'starts_at', 'uuid'],

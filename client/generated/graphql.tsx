@@ -68,14 +68,6 @@ export type HousesQuery = (
   )> }
 );
 
-export type YearsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type YearsQuery = (
-  { __typename?: 'Query' }
-  & Pick<Query, 'years'>
-);
-
 export type YearOfHousesQueryVariables = Exact<{
   year: Scalars['Int'];
 }>;
@@ -152,38 +144,6 @@ export function useHousesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookO
 export type HousesQueryHookResult = ReturnType<typeof useHousesQuery>;
 export type HousesLazyQueryHookResult = ReturnType<typeof useHousesLazyQuery>;
 export type HousesQueryResult = ApolloReactCommon.QueryResult<HousesQuery, HousesQueryVariables>;
-export const YearsDocument = gql`
-    query years {
-  years
-}
-    `;
-
-/**
- * __useYearsQuery__
- *
- * To run a query within a React component, call `useYearsQuery` and pass it any options that fit your needs.
- * When your component renders, `useYearsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useYearsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useYearsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<YearsQuery, YearsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return ApolloReactHooks.useQuery<YearsQuery, YearsQueryVariables>(YearsDocument, options);
-      }
-export function useYearsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<YearsQuery, YearsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useLazyQuery<YearsQuery, YearsQueryVariables>(YearsDocument, options);
-        }
-export type YearsQueryHookResult = ReturnType<typeof useYearsQuery>;
-export type YearsLazyQueryHookResult = ReturnType<typeof useYearsLazyQuery>;
-export type YearsQueryResult = ApolloReactCommon.QueryResult<YearsQuery, YearsQueryVariables>;
 export const YearOfHousesDocument = gql`
     query yearOfHouses($year: Int!) {
   yearOfHouses(year: $year) {

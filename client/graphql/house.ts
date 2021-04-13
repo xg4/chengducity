@@ -15,12 +15,6 @@ export const HOUSES = gql`
   }
 `;
 
-export const YEARS = gql`
-  query years {
-    years
-  }
-`;
-
 export const yearOfHouses = gql`
   query yearOfHouses($year: Int!) {
     yearOfHouses(year: $year) {

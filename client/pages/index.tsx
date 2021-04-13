@@ -3,7 +3,6 @@ import { orderBy } from 'lodash';
 import dynamic from 'next/dynamic';
 import Layout from '../components/Layout';
 import TableCard from '../components/TableCard';
-import { useHousesQuery } from '../generated/graphql';
 import { useMetrics } from '../hooks';
 
 const ChartCard = dynamic(() => import('../components/ChartCard'), {
@@ -11,13 +10,8 @@ const ChartCard = dynamic(() => import('../components/ChartCard'), {
 });
 
 export default function Home() {
-  const { data } = useHousesQuery();
-  const dataSource = orderBy(
-    data?.houses ?? [],
-    ['ends_at', 'starts_at', 'uuid'],
-    ['desc', 'desc', 'desc'],
-  );
   const {
+    dataSource: houses,
     currentMonthData,
     currentQuarterData,
     currentYearData,
@@ -26,7 +20,13 @@ export default function Home() {
     prevYearData,
     monthOfData,
     regionOfData,
-  } = useMetrics(dataSource);
+  } = useMetrics();
+
+  const dataSource = orderBy(
+    houses,
+    ['ends_at', 'starts_at', 'uuid'],
+    ['desc', 'desc', 'desc'],
+  );
 
   const boxList = [
     {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useYearsQuery } from '../generated/graphql';
+import { useMetrics } from '../hooks';
 import Nav from './Nav';
 
 interface LayoutProps {
@@ -8,12 +8,9 @@ interface LayoutProps {
 }
 
 export default function Layout({ className, children }: LayoutProps) {
-  const { data } = useYearsQuery();
-
-  const list = data?.years ?? [];
-
+  const { yearOfData } = useMetrics();
   const tabs = [{ name: '首页', path: '/' }].concat(
-    list
+    Object.keys(yearOfData)
       .map((year) => ({ name: `${year}年`, path: `/year/${year}` }))
       .sort()
       .reverse(),

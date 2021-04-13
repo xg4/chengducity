@@ -1,8 +1,11 @@
 import dayjs from 'dayjs';
 import { groupBy } from 'lodash';
 import { useMemo } from 'react';
+import { useHousesQuery } from '../generated/graphql';
 
-export function useMetrics(data: House[]) {
+export function useMetrics() {
+  const { data: dataSource, loading } = useHousesQuery();
+  const data = dataSource?.houses ?? [];
   const key = data.map((item) => item.uuid).join();
 
   return useMemo(() => {
@@ -35,6 +38,8 @@ export function useMetrics(data: House[]) {
 
     const regionOfData = groupBy(data, 'region');
     return {
+      dataSource: data,
+      loading,
       currentYearData,
       prevYearData,
       currentQuarterData,
