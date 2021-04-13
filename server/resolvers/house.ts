@@ -7,7 +7,7 @@ import { House } from '../models';
 export class HouseResolver {
   @Query(() => [House])
   houses() {
-    return House.find();
+    return House.find({ cache: true });
   }
 
   @Query(() => [String])

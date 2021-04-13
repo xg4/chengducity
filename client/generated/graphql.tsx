@@ -28,6 +28,22 @@ export type House = {
   source: Scalars['String'];
 };
 
+export type Mutation = {
+  __typename?: 'Mutation';
+  pushMessage: Scalars['Boolean'];
+};
+
+
+export type MutationPushMessageArgs = {
+  data: PushMessageInputs;
+};
+
+export type PushMessageInputs = {
+  token: Scalars['String'];
+  content: Scalars['String'];
+  type?: Maybe<Scalars['String']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   houses: Array<House>;
@@ -51,6 +67,16 @@ export type YearsQueryVariables = Exact<{ [key: string]: never; }>;
 export type YearsQuery = (
   { __typename?: 'Query' }
   & Pick<Query, 'years'>
+);
+
+export type PushMessageMutationVariables = Exact<{
+  data: PushMessageInputs;
+}>;
+
+
+export type PushMessageMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'pushMessage'>
 );
 
 
@@ -127,3 +153,34 @@ export function useYearsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOp
 export type YearsQueryHookResult = ReturnType<typeof useYearsQuery>;
 export type YearsLazyQueryHookResult = ReturnType<typeof useYearsLazyQuery>;
 export type YearsQueryResult = ApolloReactCommon.QueryResult<YearsQuery, YearsQueryVariables>;
+export const PushMessageDocument = gql`
+    mutation pushMessage($data: PushMessageInputs!) {
+  pushMessage(data: $data)
+}
+    `;
+export type PushMessageMutationFn = ApolloReactCommon.MutationFunction<PushMessageMutation, PushMessageMutationVariables>;
+
+/**
+ * __usePushMessageMutation__
+ *
+ * To run a mutation, you first call `usePushMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePushMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [pushMessageMutation, { data, loading, error }] = usePushMessageMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function usePushMessageMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<PushMessageMutation, PushMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<PushMessageMutation, PushMessageMutationVariables>(PushMessageDocument, options);
+      }
+export type PushMessageMutationHookResult = ReturnType<typeof usePushMessageMutation>;
+export type PushMessageMutationResult = ApolloReactCommon.MutationResult<PushMessageMutation>;
+export type PushMessageMutationOptions = ApolloReactCommon.BaseMutationOptions<PushMessageMutation, PushMessageMutationVariables>;

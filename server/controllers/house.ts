@@ -1,23 +1,9 @@
 import dayjs from 'dayjs';
 import { Request, Response } from 'express';
-import { groupBy } from 'lodash';
 import { Between } from 'typeorm';
 import { bot, take } from '../../server/lib';
 import { House, User } from '../../server/models';
 import { composeContent } from '../../server/util';
-
-const ERROR_MSG = 'Something wrong. Please contact xingor4@gmail.com.';
-
-export async function years(req: Request, res: Response) {
-  try {
-    const houses = await House.find({ select: ['ends_at'], cache: true });
-    const years = groupBy(houses, (item) => dayjs(item.ends_at).get('year'));
-    res.json(Object.keys(years));
-  } catch (err) {
-    console.log(err);
-    res.status(500).json('Internal Server Error');
-  }
-}
 
 export async function year(req: Request, res: Response) {
   const { year } = req.params;
@@ -33,22 +19,6 @@ export async function year(req: Request, res: Response) {
       },
       cache: true,
     });
-    res.json(houses);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json('Internal Server Error');
-  }
-}
-
-export async function all(req: Request, res: Response) {
-  try {
-    const houses = await House.find({
-      order: {
-        ends_at: 'DESC',
-      },
-      cache: true,
-    });
-
     res.json(houses);
   } catch (err) {
     console.log(err);

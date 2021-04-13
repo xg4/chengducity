@@ -3,6 +3,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import Head from 'next/head';
 import { useState } from 'react';
 import { v4 } from 'uuid';
+import { usePushMessageMutation } from '../generated/graphql';
 
 interface Record {
   id: string;
@@ -34,20 +35,22 @@ export default function Push() {
 
   const [records, setRecords] = useState<Record[]>([]);
 
-  const onSubmit = async (data: any) => {
-    const result = await fetch('/api/v1/push', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
+  const [push, { loading }] = usePushMessageMutation();
 
-    if (!result.ok) {
-      const msg = await result.json();
-      message.error(msg);
+  const onSubmit = async (data: any) => {
+    const result = await push({ variables: { data } });
+
+    if (result.errors) {
+      const error = result.errors[0];
+      message.error(error.message);
       return;
     }
+
+    if (!result.data?.pushMessage) {
+      message.error('发送失败');
+      return;
+    }
+
     setRecords([{ ...data, createdAt: dayjs(), id: v4() }, ...records]);
     form.setFields([{ name: 'content', value: '' }]);
     message.success('发送成功');
@@ -101,7 +104,7 @@ export default function Push() {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit">
+            <Button loading={loading} type="primary" htmlType="submit">
               发送
             </Button>
           </Form.Item>
