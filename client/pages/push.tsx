@@ -38,22 +38,25 @@ export default function Push() {
   const [push, { loading }] = usePushMessageMutation();
 
   const onSubmit = async (data: any) => {
-    const result = await push({ variables: { data } });
+    try {
+      const result = await push({ variables: { data } });
+      if (result.errors) {
+        const error = result.errors[0];
+        message.error(error.message);
+        return;
+      }
 
-    if (result.errors) {
-      const error = result.errors[0];
-      message.error(error.message);
-      return;
+      if (!result.data?.pushMessage) {
+        message.error('发送失败');
+        return;
+      }
+
+      setRecords([{ ...data, createdAt: dayjs(), id: v4() }, ...records]);
+      form.setFields([{ name: 'content', value: '' }]);
+      message.success('发送成功');
+    } catch (err) {
+      message.error(err.message);
     }
-
-    if (!result.data?.pushMessage) {
-      message.error('发送失败');
-      return;
-    }
-
-    setRecords([{ ...data, createdAt: dayjs(), id: v4() }, ...records]);
-    form.setFields([{ name: 'content', value: '' }]);
-    message.success('发送成功');
   };
 
   return (
@@ -70,6 +73,7 @@ export default function Push() {
           <p>
             Now you can jump{' '}
             <a
+              target="_blank"
               className="underline text-blue-400"
               href="https://t.me/chengducitybot"
             >

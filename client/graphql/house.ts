@@ -37,8 +37,8 @@ export const yearOfHouses = gql`
 `;
 
 export const pullHouses = gql`
-  mutation pullHouses($page: Int!) {
-    pullHouses(page: $page) {
+  mutation pullHouses {
+    pullHouses {
       uuid
       region
       name

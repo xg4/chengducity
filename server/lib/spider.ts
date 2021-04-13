@@ -1,4 +1,5 @@
 import cheerio from 'cheerio';
+import dayjs from 'dayjs';
 import fetch from 'node-fetch';
 import { House, User } from '../models';
 import { composeContent, delay } from '../util';
@@ -6,10 +7,30 @@ import { bot } from './bot';
 
 const pageSize = 10;
 
+export async function pull(page = 1) {
+  console.log('[spider] page ', page);
+  const dataSource = await spider(page);
+
+  let list = dataSource.map(filterData);
+
+  const isRecent = list.every(
+    (item) => dayjs().diff(item.ends_at, 'month') === 0,
+  );
+
+  if (isRecent) {
+    const nextList = await pull(page + 1);
+    list = list.concat(nextList);
+  }
+
+  return list;
+}
+
 // 定时任务
 export async function task(page = 1, isAll = false) {
   console.log('[spider] page ', page);
-  const list = await take(page);
+  const dataSource = await spider(page);
+
+  const list = dataSource.map(filterData);
   const users = await User.find();
 
   await Promise.all(
@@ -41,14 +62,6 @@ export async function task(page = 1, isAll = false) {
 
   await delay(1 * 1e3);
   await task(page + 1, isAll);
-}
-
-export async function take(page: number) {
-  const dataSource = await spider(page);
-
-  const list = dataSource.map(filterData);
-
-  return list;
 }
 
 export async function spider(pageNo: number) {

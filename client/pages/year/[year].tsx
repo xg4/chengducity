@@ -157,7 +157,11 @@ export default function Years() {
   const { data } = useHousesQuery();
   const dataSource = data?.houses ?? [];
   const { yearOfData } = useMetrics(dataSource);
-  const houses = orderBy(yearOfData[year] ?? [], 'ends_at', 'asc');
+  const houses = orderBy(
+    yearOfData[year] ?? [],
+    ['ends_at', 'starts_at', 'uuid'],
+    ['asc', 'asc', 'asc'],
+  );
 
   return (
     <Layout className="bg-gray-100">

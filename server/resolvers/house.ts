@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import { groupBy } from 'lodash';
 import { Arg, Int, Mutation, Query, Resolver } from 'type-graphql';
 import { Between } from 'typeorm';
-import { bot, take } from '../lib';
+import { bot, pull } from '../lib';
 import { House, User } from '../models';
 import { composeContent } from '../util';
 
@@ -37,9 +37,8 @@ export class HouseResolver {
   }
 
   @Mutation(() => [House])
-  async pullHouses(@Arg('page', () => Int) page: number) {
-    // TODO: 拉取最近一个月数据
-    const list = await take(page);
+  async pullHouses() {
+    const list = await pull();
 
     const users = await User.find();
 

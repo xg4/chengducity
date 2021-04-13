@@ -1,4 +1,7 @@
-import { GithubOutlined } from '@ant-design/icons';
+import { GithubOutlined, SyncOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
+import { useCallback } from 'react';
+import { usePullHousesMutation } from '../generated/graphql';
 import ActiveLink from './ActiveLink';
 
 interface NavProps {
@@ -6,8 +9,14 @@ interface NavProps {
 }
 
 export default function Nav({ links }: NavProps) {
+  const [pull, { loading }] = usePullHousesMutation();
+
+  const pullHouses = useCallback(() => {
+    pull();
+  }, [pull]);
+
   return (
-    <nav className="bg-white flex justify-between">
+    <nav className="bg-white flex justify-between items-center">
       <ul className="flex list-none p-0 m-0">
         {links.map((link) => (
           <li className="p-4" key={link.name}>
@@ -18,13 +27,24 @@ export default function Nav({ links }: NavProps) {
         ))}
       </ul>
 
-      <a
-        className="p-4 text-gray-800 text-xl hover:text-gray-400"
-        target="_blank"
-        href="https://github.com/xg4/chengducity"
-      >
-        <GithubOutlined></GithubOutlined>
-      </a>
+      <div className="flex items-center">
+        <Button
+          className="mr-2"
+          type="link"
+          icon={<SyncOutlined className="text-gray-800 text-xl" />}
+          onClick={pullHouses}
+          loading={loading}
+        ></Button>
+
+        <Button
+          href="https://github.com/xg4/chengducity"
+          target="_blank"
+          type="link"
+          icon={
+            <GithubOutlined className="text-gray-800 text-xl"></GithubOutlined>
+          }
+        ></Button>
+      </div>
     </nav>
   );
 }

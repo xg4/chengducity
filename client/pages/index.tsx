@@ -1,8 +1,9 @@
 import { Card, Col, Row } from 'antd';
+import { orderBy } from 'lodash';
 import dynamic from 'next/dynamic';
 import Layout from '../components/Layout';
 import TableCard from '../components/TableCard';
-import { useHousesQuery, usePullHousesMutation } from '../generated/graphql';
+import { useHousesQuery } from '../generated/graphql';
 import { useMetrics } from '../hooks';
 
 const ChartCard = dynamic(() => import('../components/ChartCard'), {
@@ -11,7 +12,11 @@ const ChartCard = dynamic(() => import('../components/ChartCard'), {
 
 export default function Home() {
   const { data } = useHousesQuery();
-  const dataSource = data?.houses ?? [];
+  const dataSource = orderBy(
+    data?.houses ?? [],
+    ['ends_at', 'starts_at', 'uuid'],
+    ['desc', 'desc', 'desc'],
+  );
   const {
     currentMonthData,
     currentQuarterData,
@@ -22,8 +27,6 @@ export default function Home() {
     monthOfData,
     regionOfData,
   } = useMetrics(dataSource);
-
-  const [pull] = usePullHousesMutation();
 
   const boxList = [
     {
@@ -49,13 +52,6 @@ export default function Home() {
   return (
     <Layout className="bg-gray-100">
       <main>
-        <button
-          onClick={() => {
-            pull({ variables: { page: 1 } });
-          }}
-        >
-          123
-        </button>
         <div className="m-5">
           <Row gutter={16}>
             {boxList.map((item) => {

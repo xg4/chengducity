@@ -35,11 +35,6 @@ export type Mutation = {
 };
 
 
-export type MutationPullHousesArgs = {
-  page: Scalars['Int'];
-};
-
-
 export type MutationPushMessageArgs = {
   data: PushMessageInputs;
 };
@@ -94,9 +89,7 @@ export type YearOfHousesQuery = (
   )> }
 );
 
-export type PullHousesMutationVariables = Exact<{
-  page: Scalars['Int'];
-}>;
+export type PullHousesMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type PullHousesMutation = (
@@ -234,8 +227,8 @@ export type YearOfHousesQueryHookResult = ReturnType<typeof useYearOfHousesQuery
 export type YearOfHousesLazyQueryHookResult = ReturnType<typeof useYearOfHousesLazyQuery>;
 export type YearOfHousesQueryResult = ApolloReactCommon.QueryResult<YearOfHousesQuery, YearOfHousesQueryVariables>;
 export const PullHousesDocument = gql`
-    mutation pullHouses($page: Int!) {
-  pullHouses(page: $page) {
+    mutation pullHouses {
+  pullHouses {
     uuid
     region
     name
@@ -262,7 +255,6 @@ export type PullHousesMutationFn = ApolloReactCommon.MutationFunction<PullHouses
  * @example
  * const [pullHousesMutation, { data, loading, error }] = usePullHousesMutation({
  *   variables: {
- *      page: // value for 'page'
  *   },
  * });
  */
