@@ -27,7 +27,6 @@
     "dev": "nodemon --watch server --ext ts --exec npm run serve",
     "build": "next build ./client",
     "start": "cross-env NODE_ENV=production npm run serve",
-    "heroku-postbuild": "npm run db:migrate && npm run build",
     "pretty": "prettier --write client/**/*.ts* server/**/*.ts",
     "gql": "graphql-codegen --config codegen.js"
   },

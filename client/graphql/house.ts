@@ -20,3 +20,33 @@ export const YEARS = gql`
     years
   }
 `;
+
+export const yearOfHouses = gql`
+  query yearOfHouses($year: Int!) {
+    yearOfHouses(year: $year) {
+      uuid
+      region
+      name
+      details
+      number
+      starts_at
+      ends_at
+      status
+    }
+  }
+`;
+
+export const pullHouses = gql`
+  mutation pullHouses($page: Int!) {
+    pullHouses(page: $page) {
+      uuid
+      region
+      name
+      details
+      number
+      starts_at
+      ends_at
+      status
+    }
+  }
+`;

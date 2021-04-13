@@ -30,7 +30,13 @@ export type House = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  pullHouses: Array<House>;
   pushMessage: Scalars['Boolean'];
+};
+
+
+export type MutationPullHousesArgs = {
+  page: Scalars['Int'];
 };
 
 
@@ -47,7 +53,13 @@ export type PushMessageInputs = {
 export type Query = {
   __typename?: 'Query';
   houses: Array<House>;
+  yearOfHouses: Array<House>;
   years: Array<Scalars['String']>;
+};
+
+
+export type QueryYearOfHousesArgs = {
+  year: Scalars['Int'];
 };
 
 export type HousesQueryVariables = Exact<{ [key: string]: never; }>;
@@ -67,6 +79,32 @@ export type YearsQueryVariables = Exact<{ [key: string]: never; }>;
 export type YearsQuery = (
   { __typename?: 'Query' }
   & Pick<Query, 'years'>
+);
+
+export type YearOfHousesQueryVariables = Exact<{
+  year: Scalars['Int'];
+}>;
+
+
+export type YearOfHousesQuery = (
+  { __typename?: 'Query' }
+  & { yearOfHouses: Array<(
+    { __typename?: 'House' }
+    & Pick<House, 'uuid' | 'region' | 'name' | 'details' | 'number' | 'starts_at' | 'ends_at' | 'status'>
+  )> }
+);
+
+export type PullHousesMutationVariables = Exact<{
+  page: Scalars['Int'];
+}>;
+
+
+export type PullHousesMutation = (
+  { __typename?: 'Mutation' }
+  & { pullHouses: Array<(
+    { __typename?: 'House' }
+    & Pick<House, 'uuid' | 'region' | 'name' | 'details' | 'number' | 'starts_at' | 'ends_at' | 'status'>
+  )> }
 );
 
 export type PushMessageMutationVariables = Exact<{
@@ -153,6 +191,88 @@ export function useYearsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOp
 export type YearsQueryHookResult = ReturnType<typeof useYearsQuery>;
 export type YearsLazyQueryHookResult = ReturnType<typeof useYearsLazyQuery>;
 export type YearsQueryResult = ApolloReactCommon.QueryResult<YearsQuery, YearsQueryVariables>;
+export const YearOfHousesDocument = gql`
+    query yearOfHouses($year: Int!) {
+  yearOfHouses(year: $year) {
+    uuid
+    region
+    name
+    details
+    number
+    starts_at
+    ends_at
+    status
+  }
+}
+    `;
+
+/**
+ * __useYearOfHousesQuery__
+ *
+ * To run a query within a React component, call `useYearOfHousesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useYearOfHousesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useYearOfHousesQuery({
+ *   variables: {
+ *      year: // value for 'year'
+ *   },
+ * });
+ */
+export function useYearOfHousesQuery(baseOptions: ApolloReactHooks.QueryHookOptions<YearOfHousesQuery, YearOfHousesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<YearOfHousesQuery, YearOfHousesQueryVariables>(YearOfHousesDocument, options);
+      }
+export function useYearOfHousesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<YearOfHousesQuery, YearOfHousesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<YearOfHousesQuery, YearOfHousesQueryVariables>(YearOfHousesDocument, options);
+        }
+export type YearOfHousesQueryHookResult = ReturnType<typeof useYearOfHousesQuery>;
+export type YearOfHousesLazyQueryHookResult = ReturnType<typeof useYearOfHousesLazyQuery>;
+export type YearOfHousesQueryResult = ApolloReactCommon.QueryResult<YearOfHousesQuery, YearOfHousesQueryVariables>;
+export const PullHousesDocument = gql`
+    mutation pullHouses($page: Int!) {
+  pullHouses(page: $page) {
+    uuid
+    region
+    name
+    details
+    number
+    starts_at
+    ends_at
+    status
+  }
+}
+    `;
+export type PullHousesMutationFn = ApolloReactCommon.MutationFunction<PullHousesMutation, PullHousesMutationVariables>;
+
+/**
+ * __usePullHousesMutation__
+ *
+ * To run a mutation, you first call `usePullHousesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePullHousesMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [pullHousesMutation, { data, loading, error }] = usePullHousesMutation({
+ *   variables: {
+ *      page: // value for 'page'
+ *   },
+ * });
+ */
+export function usePullHousesMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<PullHousesMutation, PullHousesMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<PullHousesMutation, PullHousesMutationVariables>(PullHousesDocument, options);
+      }
+export type PullHousesMutationHookResult = ReturnType<typeof usePullHousesMutation>;
+export type PullHousesMutationResult = ApolloReactCommon.MutationResult<PullHousesMutation>;
+export type PullHousesMutationOptions = ApolloReactCommon.BaseMutationOptions<PullHousesMutation, PullHousesMutationVariables>;
 export const PushMessageDocument = gql`
     mutation pushMessage($data: PushMessageInputs!) {
   pushMessage(data: $data)
