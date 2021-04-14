@@ -59,9 +59,7 @@ export class HouseResolver {
       }),
     );
 
-    const sendHouses = diffHouses.filter(
-      (item) => item instanceof House,
-    ) as House[];
+    const sendHouses = diffHouses.filter(Boolean) as House[];
 
     if (sendHouses.length) {
       const users = await User.find();
@@ -77,6 +75,6 @@ export class HouseResolver {
       }
     }
 
-    return houses;
+    return sendHouses;
   }
 }

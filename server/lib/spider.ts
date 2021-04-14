@@ -44,6 +44,7 @@ async function _pull(page = 1, type = 'recent') {
   return list;
 }
 
+// TODO: add first type
 export async function pull(page = 1, type = 'recent') {
   console.log('[spider] page ', page);
 
@@ -58,10 +59,10 @@ export async function pull(page = 1, type = 'recent') {
 
   if (record) {
     if (type === 'recent' && dayjs().diff(record.created_at, 'hour') === 0) {
-      return [];
+      throw new Error(type + ' nothing changed');
     }
     if (type === 'all' && dayjs().diff(record.created_at, 'day') === 0) {
-      return [];
+      throw new Error(type + ' nothing changed');
     }
   }
 

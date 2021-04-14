@@ -23,8 +23,10 @@ export default function Nav({ links }: NavProps) {
 
   const { data } = useRecordsCountQuery();
 
-  const pullHouses = useCallback(() => {
-    pull();
+  const pullHouses = useCallback(async () => {
+    try {
+      await pull();
+    } catch {}
   }, [pull]);
 
   return (
