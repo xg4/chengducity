@@ -26,16 +26,16 @@ async function diff(houses: HouseSource[]) {
 
   if (sendHouses.length) {
     const users = await User.find();
-    await Promise.all(
-      sendHouses.map((house) =>
-        users.map((user) =>
+    for (const user of users) {
+      await Promise.all(
+        sendHouses.map((house) =>
           bot.telegram.sendMessage(
             user.telegram_chat_id,
             composeContent(house),
           ),
         ),
-      ),
-    );
+      );
+    }
   }
 }
 

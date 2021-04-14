@@ -1,7 +1,10 @@
 import { GithubOutlined, SyncOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import { useCallback } from 'react';
-import { usePullHousesMutation } from '../generated/graphql';
+import {
+  usePullHousesMutation,
+  useRecordsCountQuery,
+} from '../generated/graphql';
 import ActiveLink from './ActiveLink';
 
 interface NavProps {
@@ -10,6 +13,8 @@ interface NavProps {
 
 export default function Nav({ links }: NavProps) {
   const [pull, { loading }] = usePullHousesMutation();
+
+  const { data } = useRecordsCountQuery();
 
   const pullHouses = useCallback(() => {
     pull();
@@ -28,6 +33,9 @@ export default function Nav({ links }: NavProps) {
       </ul>
 
       <div className="flex items-center">
+        {data ? (
+          <span className="mr-2">累计查询：{data.recordsCount}次</span>
+        ) : null}
         <Button
           className="mr-2"
           type="link"
@@ -35,7 +43,6 @@ export default function Nav({ links }: NavProps) {
           onClick={pullHouses}
           loading={loading}
         ></Button>
-
         <Button
           href="https://github.com/xg4/chengducity"
           target="_blank"

@@ -1,5 +1,7 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import { ConfigProvider } from 'antd';
 import 'antd/dist/antd.css';
+import zhCN from 'antd/lib/locale/zh_CN';
 import dayjs from 'dayjs';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import { AppProps } from 'next/app';
@@ -47,7 +49,9 @@ function MyApp({ Component, pageProps }: AppProps) {
               },
             }}
           >
-            <Component {...pageProps}></Component>
+            <ConfigProvider locale={zhCN}>
+              <Component {...pageProps}></Component>
+            </ConfigProvider>
           </SWRConfig>
         </Provider>
       </ApolloProvider>

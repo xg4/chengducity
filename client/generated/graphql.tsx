@@ -49,6 +49,7 @@ export type Query = {
   __typename?: 'Query';
   houses: Array<House>;
   yearOfHouses: Array<House>;
+  recordsCount: Scalars['Int'];
   years: Array<Scalars['String']>;
 };
 
@@ -66,6 +67,14 @@ export type HousesQuery = (
     { __typename?: 'House' }
     & Pick<House, 'uuid' | 'region' | 'name' | 'details' | 'number' | 'starts_at' | 'ends_at' | 'status'>
   )> }
+);
+
+export type RecordsCountQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type RecordsCountQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'recordsCount'>
 );
 
 export type YearOfHousesQueryVariables = Exact<{
@@ -144,6 +153,38 @@ export function useHousesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookO
 export type HousesQueryHookResult = ReturnType<typeof useHousesQuery>;
 export type HousesLazyQueryHookResult = ReturnType<typeof useHousesLazyQuery>;
 export type HousesQueryResult = ApolloReactCommon.QueryResult<HousesQuery, HousesQueryVariables>;
+export const RecordsCountDocument = gql`
+    query recordsCount {
+  recordsCount
+}
+    `;
+
+/**
+ * __useRecordsCountQuery__
+ *
+ * To run a query within a React component, call `useRecordsCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRecordsCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRecordsCountQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useRecordsCountQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<RecordsCountQuery, RecordsCountQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<RecordsCountQuery, RecordsCountQueryVariables>(RecordsCountDocument, options);
+      }
+export function useRecordsCountLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<RecordsCountQuery, RecordsCountQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<RecordsCountQuery, RecordsCountQueryVariables>(RecordsCountDocument, options);
+        }
+export type RecordsCountQueryHookResult = ReturnType<typeof useRecordsCountQuery>;
+export type RecordsCountLazyQueryHookResult = ReturnType<typeof useRecordsCountLazyQuery>;
+export type RecordsCountQueryResult = ApolloReactCommon.QueryResult<RecordsCountQuery, RecordsCountQueryVariables>;
 export const YearOfHousesDocument = gql`
     query yearOfHouses($year: Int!) {
   yearOfHouses(year: $year) {
