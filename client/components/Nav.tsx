@@ -3,6 +3,7 @@ import { Button } from 'antd';
 import { useCallback } from 'react';
 import {
   HousesDocument,
+  RecordsCountDocument,
   usePullHousesMutation,
   useRecordsCountQuery,
 } from '../generated/graphql';
@@ -14,7 +15,10 @@ interface NavProps {
 
 export default function Nav({ links }: NavProps) {
   const [pull, { loading }] = usePullHousesMutation({
-    refetchQueries: [{ query: HousesDocument }],
+    refetchQueries: [
+      { query: HousesDocument },
+      { query: RecordsCountDocument },
+    ],
   });
 
   const { data } = useRecordsCountQuery();
