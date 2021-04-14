@@ -1,67 +1,76 @@
 import cheerio from 'cheerio';
 import dayjs from 'dayjs';
 import fetch from 'node-fetch';
-import { House, User } from '../models';
-import { composeContent, delay } from '../util';
-import { bot } from './bot';
+import { Record } from '../models';
+import { delay } from '../util';
 
 const pageSize = 10;
 
-export async function pull(page = 1) {
-  console.log('[spider] page ', page);
+export interface HouseSource {
+  uuid: string;
+  region: string;
+  name: string;
+  details: string;
+  number: string;
+  starts_at: string;
+  ends_at: string;
+  status: string;
+  source: string;
+}
+
+async function _pull(page = 1, type = 'recent') {
   const dataSource = await spider(page);
 
-  let list = dataSource.map(filterData);
+  const currentList = dataSource.map(filterData);
 
-  const isRecent = list.every(
+  const isRecent = currentList.every(
     (item) => dayjs().diff(item.ends_at, 'month') === 0,
   );
 
-  if (isRecent) {
-    const nextList = await pull(page + 1);
-    list = list.concat(nextList);
+  let list: HouseSource[] = [];
+
+  if (isRecent && type === 'recent') {
+    await delay(1 * 1e3);
+    const nextList = await _pull(page + 1, type);
+    list = [...currentList, ...nextList];
+  }
+
+  if (currentList.length === pageSize && type === 'all') {
+    await delay(1 * 1e3);
+    const nextList = await _pull(page + 1, type);
+    list = [...currentList, ...nextList];
   }
 
   return list;
 }
 
-// 定时任务
-export async function task(page = 1, isAll = false) {
+export async function pull(page = 1, type = 'recent') {
   console.log('[spider] page ', page);
-  const dataSource = await spider(page);
 
-  const list = dataSource.map(filterData);
-  const users = await User.find();
+  const record = await Record.findOne({
+    where: {
+      type,
+    },
+    order: {
+      id: 'DESC',
+    },
+  });
 
-  await Promise.all(
-    list.map(async (item) => {
-      const savedHouses = await House.findOne({
-        uuid: item.uuid,
-      });
-
-      const house = House.create(item);
-
-      if (savedHouses?.status !== house.status) {
-        await Promise.all(
-          users.map((user) =>
-            bot.telegram.sendMessage(
-              user.telegram_chat_id,
-              composeContent(house),
-            ),
-          ),
-        );
-      }
-
-      await house.save();
-    }),
-  );
-
-  if (list.length < pageSize || !isAll) {
-    return;
+  if (record) {
+    if (type === 'recent' && dayjs().diff(record.created_at, 'hour') === 0) {
+      return [];
+    }
+    if (type === 'all' && dayjs().diff(record.created_at, 'day') === 0) {
+      return [];
+    }
   }
 
-  await delay(1 * 1e3);
-  await task(page + 1, isAll);
+  const houses = await _pull(page, type);
+
+  const newRecord = Record.create({ type });
+  await newRecord.save();
+
+  return houses;
 }
 
 export async function spider(pageNo: number) {

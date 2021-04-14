@@ -1,6 +1,5 @@
 import { ApolloServer } from 'apollo-server-express';
 import cors from 'cors';
-import { CronJob } from 'cron';
 import express from 'express';
 import morgan from 'morgan';
 import next from 'next';
@@ -9,20 +8,9 @@ import 'reflect-metadata';
 import { buildSchema } from 'type-graphql';
 import { createConnection } from 'typeorm';
 import { SECRET_PATH } from './config';
-import { bot, task } from './lib';
+import { bot, oneDayOfJob, oneHourOfJob } from './lib';
 import { resolvers } from './resolvers';
 
-// 定时任务
-const oneDayOfJob = new CronJob('0 0 2 * * *', async () => {
-  console.log('[oneDayOfJob] start ', new Date().toISOString());
-  await task(1, true);
-  console.log('[oneDayOfJob] end ', new Date().toISOString());
-});
-const oneHourOfJob = new CronJob('0 2 * * * *', async () => {
-  console.log('[oneHourOfJob] start ', new Date().toISOString());
-  await task();
-  console.log('[oneHourOfJob] end ', new Date().toISOString());
-});
 oneDayOfJob.start();
 oneHourOfJob.start();
 
