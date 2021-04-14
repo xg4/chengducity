@@ -2,6 +2,7 @@ import { GithubOutlined, SyncOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import { useCallback } from 'react';
 import {
+  HousesDocument,
   usePullHousesMutation,
   useRecordsCountQuery,
 } from '../generated/graphql';
@@ -12,7 +13,9 @@ interface NavProps {
 }
 
 export default function Nav({ links }: NavProps) {
-  const [pull, { loading }] = usePullHousesMutation();
+  const [pull, { loading }] = usePullHousesMutation({
+    refetchQueries: [{ query: HousesDocument }],
+  });
 
   const { data } = useRecordsCountQuery();
 
