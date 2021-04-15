@@ -1,7 +1,6 @@
 import { ApolloServer } from 'apollo-server-express';
 import cors from 'cors';
 import express from 'express';
-import morgan from 'morgan';
 import next from 'next';
 import { join } from 'path';
 import 'reflect-metadata';
@@ -29,7 +28,6 @@ async function main() {
 
   // middleware
   server.use(express.json());
-  server.use(morgan('tiny', { skip: (req) => req.url.startsWith('/_next') }));
   server.use(cors({ credentials: true, origin: true }));
 
   // telegram bot webhook, telegraf bot

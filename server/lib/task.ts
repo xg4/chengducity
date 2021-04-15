@@ -49,7 +49,7 @@ export const oneDayOfJob = new CronJob('0 0 0 * * *', async () => {
 
 export const oneHourOfJob = new CronJob('0 0 * * * *', async () => {
   console.log('[oneHourOfJob] start ', dayjs().format('YYYY-MM-DD HH:mm:ss'));
-  const houses = await pull();
+  const houses = await pull(1, 'recent');
   console.log('[oneHourOfJob] end ', dayjs().format('YYYY-MM-DD HH:mm:ss'));
 
   await diff(houses);

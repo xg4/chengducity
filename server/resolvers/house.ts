@@ -43,7 +43,7 @@ export class HouseResolver {
 
   @Mutation(() => [House])
   async pullHouses() {
-    const houses = await pull();
+    const houses = await pull(1, 'first');
 
     const diffHouses = await Promise.all(
       houses.map(async (item) => {

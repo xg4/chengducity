@@ -18,7 +18,10 @@ export interface HouseSource {
   source: string;
 }
 
-async function _pull(page = 1, type = 'recent') {
+type PullType = 'first' | 'recent' | 'all';
+
+async function _pull(page = 1, type: PullType = 'recent') {
+  console.log('[spider] page ', page);
   const dataSource = await spider(page);
 
   const currentList = dataSource.map(filterData);
@@ -26,6 +29,10 @@ async function _pull(page = 1, type = 'recent') {
   const isRecent = currentList.every(
     (item) => dayjs().diff(item.ends_at, 'month') === 0,
   );
+
+  if (type === 'first') {
+    return currentList;
+  }
 
   let list: HouseSource[] = [];
 
@@ -44,10 +51,7 @@ async function _pull(page = 1, type = 'recent') {
   return list;
 }
 
-// TODO: add first type
-export async function pull(page = 1, type = 'recent') {
-  console.log('[spider] page ', page);
-
+export async function pull(page = 1, type: PullType = 'recent') {
   const record = await Record.findOne({
     where: {
       type,
@@ -58,11 +62,14 @@ export async function pull(page = 1, type = 'recent') {
   });
 
   if (record) {
+    if (type === 'first' && dayjs().diff(record.created_at, 'minute') === 0) {
+      throw new Error(`pull houses too fast, ${type}`);
+    }
     if (type === 'recent' && dayjs().diff(record.created_at, 'hour') === 0) {
-      throw new Error(type + ' nothing changed');
+      throw new Error(`pull houses too fast, ${type}`);
     }
     if (type === 'all' && dayjs().diff(record.created_at, 'day') === 0) {
-      throw new Error(type + ' nothing changed');
+      throw new Error(`pull houses too fast, ${type}`);
     }
   }
 

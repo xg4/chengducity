@@ -1,9 +1,12 @@
 import { GithubOutlined, SyncOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+import { Button, message, notification } from 'antd';
+import { uniqBy } from 'lodash';
 import { useCallback } from 'react';
+import { client } from '../apollo';
 import {
   HousesDocument,
   RecordsCountDocument,
+  useHousesQuery,
   usePullHousesMutation,
   useRecordsCountQuery,
 } from '../generated/graphql';
@@ -14,20 +17,40 @@ interface NavProps {
 }
 
 export default function Nav({ links }: NavProps) {
-  const [pull, { loading }] = usePullHousesMutation({
-    refetchQueries: [
-      { query: HousesDocument },
-      { query: RecordsCountDocument },
-    ],
-  });
+  const [pull, { loading }] = usePullHousesMutation();
 
-  const { data } = useRecordsCountQuery();
+  const { data: housesData } = useHousesQuery();
+  const { data: recordsData } = useRecordsCountQuery();
 
   const pullHouses = useCallback(async () => {
     try {
-      await pull();
-    } catch {}
-  }, [pull]);
+      const { data } = await pull();
+      if (data) {
+        client.writeQuery({
+          query: RecordsCountDocument,
+          data: {
+            recordsCount: recordsData ? recordsData.recordsCount + 1 : 1,
+          },
+        });
+        if (data.pullHouses.length) {
+          const oldHouses = housesData?.houses ?? [];
+          const newHouses = data.pullHouses;
+          client.writeQuery({
+            query: HousesDocument,
+            data: {
+              houses: uniqBy([...newHouses, ...oldHouses], 'uuid'),
+            },
+          });
+          notification.success({
+            message: '拉取成功',
+            description: `新数据${data.pullHouses.length}条`,
+          });
+        }
+      }
+    } catch (err) {
+      message.error(err.message);
+    }
+  }, [pull, housesData, recordsData]);
 
   return (
     <nav className="bg-white flex justify-between items-center">
@@ -42,8 +65,8 @@ export default function Nav({ links }: NavProps) {
       </ul>
 
       <div className="flex items-center">
-        {data ? (
-          <span className="mr-2">累计查询：{data.recordsCount}次</span>
+        {recordsData ? (
+          <span className="mr-2">累计查询：{recordsData.recordsCount}次</span>
         ) : null}
         <Button
           className="mr-2"
