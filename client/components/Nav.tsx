@@ -2,11 +2,10 @@ import { GithubOutlined, SyncOutlined } from '@ant-design/icons';
 import { Button, message, notification } from 'antd';
 import { uniqBy } from 'lodash';
 import { useCallback } from 'react';
-import { client } from '../apollo';
 import {
   HousesDocument,
+  HousesQuery,
   RecordsCountDocument,
-  useHousesQuery,
   usePullHousesMutation,
   useRecordsCountQuery,
 } from '../generated/graphql';
@@ -17,40 +16,46 @@ interface NavProps {
 }
 
 export default function Nav({ links }: NavProps) {
-  const [pull, { loading }] = usePullHousesMutation();
+  const [pull, { loading }] = usePullHousesMutation({
+    update(cache, { data }) {
+      cache.writeQuery({
+        query: RecordsCountDocument,
+        data: {
+          recordsCount: recordsData ? recordsData.recordsCount + 1 : 1,
+        },
+      });
 
-  const { data: housesData } = useHousesQuery();
+      if (data && data.pullHouses.length) {
+        const housesData = cache.readQuery<HousesQuery>({
+          query: HousesDocument,
+        });
+        const oldHouses = housesData?.houses ?? [];
+        const newHouses = data.pullHouses;
+        cache.writeQuery({
+          query: HousesDocument,
+          data: {
+            houses: uniqBy([...newHouses, ...oldHouses], 'uuid'),
+          },
+        });
+      }
+    },
+  });
+
   const { data: recordsData } = useRecordsCountQuery();
 
   const pullHouses = useCallback(async () => {
     try {
       const { data } = await pull();
-      if (data) {
-        client.writeQuery({
-          query: RecordsCountDocument,
-          data: {
-            recordsCount: recordsData ? recordsData.recordsCount + 1 : 1,
-          },
+      if (data && data.pullHouses.length) {
+        notification.success({
+          message: '拉取成功',
+          description: `新数据${data.pullHouses.length}条`,
         });
-        if (data.pullHouses.length) {
-          const oldHouses = housesData?.houses ?? [];
-          const newHouses = data.pullHouses;
-          client.writeQuery({
-            query: HousesDocument,
-            data: {
-              houses: uniqBy([...newHouses, ...oldHouses], 'uuid'),
-            },
-          });
-          notification.success({
-            message: '拉取成功',
-            description: `新数据${data.pullHouses.length}条`,
-          });
-        }
       }
     } catch (err) {
       message.error(err.message);
     }
-  }, [pull, housesData, recordsData]);
+  }, [pull]);
 
   return (
     <nav className="bg-white flex justify-between items-center">

@@ -1,4 +1,4 @@
-import { ApolloProvider } from '@apollo/client';
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { ConfigProvider } from 'antd';
 import 'antd/dist/antd.css';
 import zhCN from 'antd/lib/locale/zh_CN';
@@ -6,10 +6,14 @@ import dayjs from 'dayjs';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import { client } from '../apollo';
 import '../css/tailwind.css';
 
 dayjs.extend(quarterOfYear);
+
+const client = new ApolloClient({
+  uri: '/graphql',
+  cache: new InMemoryCache(),
+});
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
