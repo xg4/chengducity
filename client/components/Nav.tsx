@@ -3,9 +3,6 @@ import { Button, message, notification } from 'antd';
 import { uniqBy } from 'lodash';
 import { useCallback } from 'react';
 import {
-  HousesDocument,
-  HousesQuery,
-  RecordsCountDocument,
   usePullHousesMutation,
   useRecordsCountQuery,
 } from '../generated/graphql';
@@ -18,26 +15,20 @@ interface NavProps {
 export default function Nav({ links }: NavProps) {
   const [pull, { loading }] = usePullHousesMutation({
     update(cache, { data }) {
-      cache.writeQuery({
-        query: RecordsCountDocument,
-        data: {
-          recordsCount: recordsData ? recordsData.recordsCount + 1 : 1,
+      cache.modify({
+        fields: {
+          houses(existingHouses) {
+            const newHouses = data?.pullHouses ?? [];
+            if (!newHouses.length) {
+              return existingHouses;
+            }
+            return uniqBy([...existingHouses, ...newHouses], 'uuid');
+          },
+          recordsCount(oldRecords) {
+            return oldRecords ? oldRecords + 1 : 1;
+          },
         },
       });
-
-      if (data && data.pullHouses.length) {
-        const housesData = cache.readQuery<HousesQuery>({
-          query: HousesDocument,
-        });
-        const oldHouses = housesData?.houses ?? [];
-        const newHouses = data.pullHouses;
-        cache.writeQuery({
-          query: HousesDocument,
-          data: {
-            houses: uniqBy([...newHouses, ...oldHouses], 'uuid'),
-          },
-        });
-      }
     },
   });
 
