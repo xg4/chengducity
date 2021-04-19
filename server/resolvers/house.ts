@@ -10,7 +10,7 @@ import { composeContent } from '../util';
 export class HouseResolver {
   @Query(() => [House])
   houses() {
-    return House.find({ cache: true });
+    return House.find();
   }
 
   @Query(() => [House])
@@ -23,7 +23,6 @@ export class HouseResolver {
           date.add(1, 'year').format('YYYY-MM-DD HH:mm:ss'),
         ),
       },
-      cache: true,
     });
 
     return houses;
@@ -36,7 +35,7 @@ export class HouseResolver {
 
   @Query(() => [String])
   async years() {
-    const houses = await House.find({ select: ['ends_at'], cache: true });
+    const houses = await House.find({ select: ['ends_at'] });
     const years = groupBy(houses, (item) => dayjs(item.ends_at).get('year'));
     return Object.keys(years);
   }
