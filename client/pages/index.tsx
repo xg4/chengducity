@@ -14,10 +14,10 @@ export default function Home() {
     dataSource: houses,
     currentMonthData,
     currentQuarterData,
-    currentYearData,
+    currentWeekData,
     prevMonthData,
     prevQuarterData,
-    prevYearData,
+    prevWeekData,
     monthOfData,
     regionOfData,
   } = useMetrics();
@@ -30,6 +30,12 @@ export default function Home() {
 
   const boxList = [
     {
+      title: '本周',
+      extra: '相比上周',
+      current: currentWeekData,
+      prev: prevWeekData,
+    },
+    {
       title: '本月',
       extra: '相比上月',
       current: currentMonthData,
@@ -40,12 +46,6 @@ export default function Home() {
       extra: '相比上季',
       current: currentQuarterData,
       prev: prevQuarterData,
-    },
-    {
-      title: '本年',
-      extra: '相比上年',
-      current: currentYearData,
-      prev: prevYearData,
     },
   ];
 

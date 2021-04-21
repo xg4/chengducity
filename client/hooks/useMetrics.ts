@@ -1,11 +1,11 @@
 import dayjs from 'dayjs';
 import { groupBy } from 'lodash';
 import { useMemo } from 'react';
-import { useHousesQuery } from '../generated/graphql';
+import { House, useHousesQuery } from '../generated/graphql';
 
 export function useMetrics() {
   const { data: dataSource, loading } = useHousesQuery();
-  const data = dataSource?.houses ?? [];
+  const data = (dataSource?.houses ?? []) as House[];
   const key = data.map((item) => item.uuid).join();
 
   return useMemo(() => {
@@ -18,7 +18,18 @@ export function useMetrics() {
       return `${d.get('year')}-${d.quarter()}`;
     });
 
+    const weekOfData = groupBy(data, (item) => {
+      const d = dayjs(item.ends_at);
+      return `${d.get('year')}-${d.week()}`;
+    });
+
     const currentDate = dayjs();
+
+    const prevWeek = currentDate.subtract(1, 'week');
+    const currentWeekData =
+      weekOfData[`${currentDate.get('year')}-${currentDate.week()}`] ?? [];
+    const prevWeekData =
+      weekOfData[`${prevWeek.get('year')}-${prevWeek.week()}`] ?? [];
 
     const prevYear = currentDate.subtract(1, 'year');
     const currentYearData = yearOfData[currentDate.format('YYYY')] ?? [];
@@ -40,6 +51,8 @@ export function useMetrics() {
     return {
       dataSource: data,
       loading,
+      currentWeekData,
+      prevWeekData,
       currentYearData,
       prevYearData,
       currentQuarterData,

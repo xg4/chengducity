@@ -1,4 +1,5 @@
 import { Card, Table } from 'antd';
+import { House } from '../generated/graphql';
 
 interface TableCardProps {
   dataSource: House[];

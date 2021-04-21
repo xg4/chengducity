@@ -1,5 +1,6 @@
 import { Chart, LineAdvance } from 'bizcharts';
 import { Dictionary, orderBy } from 'lodash';
+import { House } from '../generated/graphql';
 import Rank from './Rank';
 
 interface MonthChartProps {

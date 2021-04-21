@@ -4,10 +4,12 @@ import 'antd/dist/antd.css';
 import zhCN from 'antd/lib/locale/zh_CN';
 import dayjs from 'dayjs';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
+import weekOfYear from 'dayjs/plugin/weekOfYear';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import '../css/tailwind.css';
 
+dayjs.extend(weekOfYear);
 dayjs.extend(quarterOfYear);
 
 const client = new ApolloClient({

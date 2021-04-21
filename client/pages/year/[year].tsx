@@ -17,6 +17,7 @@ import { useState } from 'react';
 import Layout from '../../components/Layout';
 import Rank from '../../components/Rank';
 import TableCard from '../../components/TableCard';
+import { House } from '../../generated/graphql';
 import { useMetrics } from '../../hooks';
 
 interface RegionCardProps {

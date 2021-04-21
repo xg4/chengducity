@@ -1,6 +1,7 @@
 import { Card, Divider } from 'antd';
 import { Dictionary } from 'lodash';
 import { useState } from 'react';
+import { House } from '../generated/graphql';
 import MonthChart from './MonthChart';
 import RegionChart from './RegionChart';
 
