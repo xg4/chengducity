@@ -28,7 +28,7 @@
     "build": "next build ./client",
     "start": "cross-env NODE_ENV=production npm run serve",
     "pretty": "prettier --write client/**/*.ts* server/**/*.ts",
-    "gql": "graphql-codegen --config codegen.js"
+    "gen": "graphql-codegen --config codegen.js"
   },
   "husky": {
     "hooks": {

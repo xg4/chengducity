@@ -20,16 +20,16 @@ export function useMetrics() {
 
     const weekOfData = groupBy(data, (item) => {
       const d = dayjs(item.ends_at);
-      return `${d.get('year')}-${d.week()}`;
+      return `${d.weekYear()}-${d.week()}`;
     });
 
     const currentDate = dayjs();
 
     const prevWeek = currentDate.subtract(1, 'week');
     const currentWeekData =
-      weekOfData[`${currentDate.get('year')}-${currentDate.week()}`] ?? [];
+      weekOfData[`${currentDate.weekYear()}-${currentDate.week()}`] ?? [];
     const prevWeekData =
-      weekOfData[`${prevWeek.get('year')}-${prevWeek.week()}`] ?? [];
+      weekOfData[`${prevWeek.weekYear()}-${prevWeek.week()}`] ?? [];
 
     const prevYear = currentDate.subtract(1, 'year');
     const currentYearData = yearOfData[currentDate.format('YYYY')] ?? [];

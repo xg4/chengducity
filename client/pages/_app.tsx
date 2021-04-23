@@ -5,10 +5,12 @@ import zhCN from 'antd/lib/locale/zh_CN';
 import dayjs from 'dayjs';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
+import weekYear from 'dayjs/plugin/weekYear';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import '../css/tailwind.css';
 
+dayjs.extend(weekYear);
 dayjs.extend(weekOfYear);
 dayjs.extend(quarterOfYear);
 
@@ -17,7 +19,7 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-function MyApp({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
@@ -37,5 +39,3 @@ function MyApp({ Component, pageProps }: AppProps) {
     </>
   );
 }
-
-export default MyApp;
