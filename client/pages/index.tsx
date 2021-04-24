@@ -1,6 +1,7 @@
-import { Card, Col, Row } from 'antd';
+import { Col, Row } from 'antd';
 import { orderBy } from 'lodash';
 import dynamic from 'next/dynamic';
+import DiffCard from '../components/DiffCard';
 import Layout from '../components/Layout';
 import TableCard from '../components/TableCard';
 import { useMetrics } from '../hooks';
@@ -28,24 +29,29 @@ export default function Home() {
     ['desc', 'desc', 'desc'],
   );
 
-  const boxList = [
+  const cardList = [
     {
       title: '本周',
       extra: '相比上周',
-      current: currentWeekData,
-      prev: prevWeekData,
+      currentData: currentWeekData,
+      prevData: prevWeekData,
     },
     {
       title: '本月',
       extra: '相比上月',
-      current: currentMonthData,
-      prev: prevMonthData,
+      currentData: currentMonthData,
+      prevData: prevMonthData,
     },
     {
       title: '本季',
       extra: '相比上季',
-      current: currentQuarterData,
-      prev: prevQuarterData,
+      currentData: currentQuarterData,
+      prevData: prevQuarterData,
+    },
+    {
+      title: '汇总',
+      currentData: dataSource,
+      prevData: dataSource,
     },
   ];
 
@@ -54,63 +60,13 @@ export default function Home() {
       <main>
         <div className="m-5">
           <Row gutter={16}>
-            {boxList.map((item) => {
-              const currentNum = item.current.length;
-              const prevNum = item.prev.length;
-              const diffNum = currentNum - prevNum;
-
-              const currentData = item.current.reduce(
-                (acc, cur) => acc + Number(cur.number),
-                0,
-              );
-              const prevData = item.prev.reduce(
-                (acc, cur) => acc + Number(cur.number),
-                0,
-              );
-              const diffData = currentData - prevData;
+            {cardList.map((item) => {
               return (
                 <Col key={item.title} span={6}>
-                  <Card title={item.title} extra={item.extra}>
-                    <div className="flex justify-between">
-                      <span>楼盘数：{currentNum}</span>
-
-                      <span
-                        className={
-                          diffNum < 0 ? 'text-green-500' : 'text-red-500'
-                        }
-                      >
-                        {diffNum}
-                      </span>
-                    </div>
-
-                    <div className="flex justify-between">
-                      <span>
-                        房源数：
-                        {currentData}
-                      </span>
-
-                      <span
-                        className={
-                          diffData < 0 ? 'text-green-500' : 'text-red-500'
-                        }
-                      >
-                        {diffData}
-                      </span>
-                    </div>
-                  </Card>
+                  <DiffCard {...item}></DiffCard>
                 </Col>
               );
             })}
-
-            <Col span={6}>
-              <Card title="汇总">
-                <div>楼盘数：{dataSource.length}</div>
-                <div>
-                  房源数：
-                  {dataSource.reduce((acc, cur) => acc + Number(cur.number), 0)}
-                </div>
-              </Card>
-            </Col>
           </Row>
         </div>
 
