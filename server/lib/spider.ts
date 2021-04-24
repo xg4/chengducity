@@ -1,8 +1,8 @@
 import cheerio from 'cheerio';
 import dayjs from 'dayjs';
 import fetch from 'node-fetch';
-import { Record } from '../models';
-import { delay } from '../util';
+import { Record } from 'server/models';
+import { delay } from 'server/util';
 
 const pageSize = 10;
 
@@ -118,7 +118,7 @@ export function filterData(data: string[]) {
     _,
     region,
     name,
-    license_number,
+    ______,
     details,
     number,
     __,

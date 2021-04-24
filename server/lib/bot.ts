@@ -1,11 +1,11 @@
 import dayjs from 'dayjs';
+import { BOT_TOKEN, SECRET_PATH, WEBHOOK } from 'server/config';
+import { House, User } from 'server/models';
+import { composeContent } from 'server/util';
 import { Context, Telegraf } from 'telegraf';
 import { MoreThan } from 'typeorm';
 import { v4 } from 'uuid';
 import pkg from '../../package.json';
-import { BOT_TOKEN, SECRET_PATH, WEBHOOK } from '../config';
-import { House, User } from '../models';
-import { composeContent } from '../util';
 
 export const bot = new Telegraf(BOT_TOKEN);
 

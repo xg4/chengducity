@@ -1,7 +1,7 @@
+import { bot } from 'server/lib';
+import { User } from 'server/models';
 import { Arg, Field, InputType, Mutation, Resolver } from 'type-graphql';
 import { ParseMode } from 'typegram';
-import { bot } from '../lib';
-import { User } from '../models';
 
 @InputType()
 export class PushMessageInputs {

@@ -1,10 +1,10 @@
 import dayjs from 'dayjs';
 import { groupBy } from 'lodash';
+import { bot, pull } from 'server/lib';
+import { House, Record, User } from 'server/models';
+import { composeContent } from 'server/util';
 import { Arg, Int, Mutation, Query, Resolver } from 'type-graphql';
 import { Between } from 'typeorm';
-import { bot, pull } from '../lib';
-import { House, Record, User } from '../models';
-import { composeContent } from '../util';
 
 @Resolver()
 export class HouseResolver {

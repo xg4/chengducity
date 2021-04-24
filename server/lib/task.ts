@@ -1,7 +1,7 @@
 import { CronJob } from 'cron';
 import dayjs from 'dayjs';
-import { House, User } from '../models';
-import { composeContent } from '../util';
+import { House, User } from 'server/models';
+import { composeContent } from 'server/util';
 import { bot } from './bot';
 import { HouseSource, pull } from './spider';
 

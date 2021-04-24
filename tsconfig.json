@@ -8,15 +8,23 @@
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "module": "CommonJS",
+    "moduleResolution": "Node",
     "noEmit": true,
+    "noImplicitAny": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "paths": {
+      "db/*": ["./db/*"],
+      "server/*": ["./server/*"],
+      "client/*": ["./client/*"]
+    },
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
     "strictPropertyInitialization": false,
-    "target": "es2020"
+    "target": "ESNext"
   },
   "exclude": ["node_modules"],
   "include": ["**/*.ts", "**/*.tsx"]
