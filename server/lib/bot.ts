@@ -32,9 +32,8 @@ const controller = {
 
       await ctx.reply(`Your token is now: ${token}`);
     } catch (err) {
-      const errId = v4();
-      console.log(errId, err);
-      await ctx.reply(`${ERROR_MSG}\n${errId}`);
+      console.log(err);
+      await ctx.reply(ERROR_MSG);
     }
   },
   async show(ctx: Context) {
@@ -52,9 +51,8 @@ const controller = {
 
       await ctx.reply(`Your current token is: ${user.token}`);
     } catch (err) {
-      const errId = v4();
-      console.log(errId, err);
-      await ctx.reply(`${ERROR_MSG}\n${errId}`);
+      console.log(err);
+      await ctx.reply(ERROR_MSG);
     }
   },
   async revoke(ctx: Context) {
@@ -72,9 +70,8 @@ const controller = {
       await user.remove();
       await ctx.reply('Done, revoke successfully');
     } catch (err) {
-      const errId = v4();
-      console.log(errId, err);
-      await ctx.reply(`${ERROR_MSG}\n${errId}`);
+      console.log(err);
+      await ctx.reply(ERROR_MSG);
     }
   },
   async now(ctx: Context) {
@@ -87,9 +84,8 @@ const controller = {
         houses.map((house) => ctx.reply(composeContent(house))),
       );
     } catch (err) {
-      const errId = v4();
-      console.log(errId, err);
-      await ctx.reply(`${ERROR_MSG}\n${errId}`);
+      console.log(err);
+      await ctx.reply(ERROR_MSG);
     }
   },
 };
