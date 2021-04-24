@@ -8,7 +8,7 @@ import weekOfYear from 'dayjs/plugin/weekOfYear';
 import weekYear from 'dayjs/plugin/weekYear';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import '../css/tailwind.css';
+import '../styles/tailwind.css';
 
 dayjs.extend(weekYear);
 dayjs.extend(weekOfYear);
