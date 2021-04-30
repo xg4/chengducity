@@ -1,4 +1,5 @@
 import { Card } from 'antd';
+import { sumBy } from 'lodash';
 import { House } from '../generated/graphql';
 
 interface DiffCardProps {
@@ -18,11 +19,9 @@ export default function DiffCard({
   const prevNum = prevData.length;
   const diffNum = currentNum - prevNum;
 
-  const currentNum2 = currentData.reduce(
-    (acc, cur) => acc + Number(cur.number),
-    0,
-  );
-  const prevNum2 = prevData.reduce((acc, cur) => acc + Number(cur.number), 0);
+  const currentNum2 = sumBy(currentData, (item) => Number(item.number));
+
+  const prevNum2 = sumBy(prevData, (item) => Number(item.number));
   const diffNum2 = currentNum2 - prevNum2;
 
   return (

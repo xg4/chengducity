@@ -1,5 +1,5 @@
 import { Chart, LineAdvance } from 'bizcharts';
-import { Dictionary, orderBy } from 'lodash';
+import { Dictionary, orderBy, sumBy } from 'lodash';
 import { House } from '../generated/graphql';
 import Rank from './Rank';
 
@@ -13,7 +13,7 @@ export default function MonthChart({ monthOfData, tabKey }: MonthChartProps) {
     {
       name: '房源数',
       month: key,
-      value: houses.reduce((acc, cur) => acc + Number(cur.number), 0),
+      value: sumBy(houses, (item) => Number(item.number)),
     },
     {
       name: '楼盘数',

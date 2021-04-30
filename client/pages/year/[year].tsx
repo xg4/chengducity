@@ -10,7 +10,7 @@ import {
 } from 'bizcharts';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
-import { groupBy, orderBy } from 'lodash';
+import { groupBy, orderBy, sumBy } from 'lodash';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -53,7 +53,7 @@ function RegionCard({ houses, className }: RegionCardProps) {
   const data = Object.entries(months).map(([key, houses]) => ({
     month: key,
     length: houses.length,
-    number: houses.reduce((acc, cur) => acc + Number(cur.number), 0),
+    number: sumBy(houses, (item) => Number(item.number)),
   }));
 
   return (
@@ -119,7 +119,7 @@ function Summary({
     ([region, houses]) => ({
       region,
       length: houses.length,
-      number: houses.reduce((acc, cur) => acc + Number(cur.number), 0),
+      number: sumBy(houses, (item) => Number(item.number)),
     }),
   );
   const regionsChart = orderBy(

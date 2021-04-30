@@ -1,5 +1,5 @@
 import { Chart, Interaction, Interval, Tooltip } from 'bizcharts';
-import { Dictionary, orderBy } from 'lodash';
+import { Dictionary, orderBy, sumBy } from 'lodash';
 import { House } from '../generated/graphql';
 
 interface RegionChartProps {
@@ -15,7 +15,7 @@ export default function RegionChart({
     return [
       {
         region: region,
-        value: houses.reduce((acc, cur) => acc + Number(cur.number), 0),
+        value: sumBy(houses, (item) => Number(item.number)),
         name: '房源数',
       },
       {
