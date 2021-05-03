@@ -113,23 +113,23 @@ const commands = [
   },
   {
     command: 'token',
-    description: 'generate authorization token',
+    description: '生成 token',
   },
   {
     command: 'revoke',
-    description: 'revoke access token',
+    description: '销毁 token',
   },
   {
     command: 'show',
-    description: 'show your current token',
+    description: '展示 token',
   },
   {
     command: 'image',
-    description: 'get a random image',
+    description: '获取随机图片',
   },
   {
     command: 'help',
-    description: 'show help message',
+    description: '展示帮助信息',
   },
 ];
 
