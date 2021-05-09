@@ -16,51 +16,48 @@ oneHourOfJob.start();
 const port = process.env.PORT || 3000;
 const dev = process.env.NODE_ENV !== 'production';
 
-const app = next({ dev, dir: join(__dirname, '../client') });
-const handle = app.getRequestHandler();
+const nextApp = next({ dev, dir: join(process.cwd(), './client') });
+const nextHandler = nextApp.getRequestHandler();
 
 async function main() {
-  await app.prepare();
   // connect database
   await createConnection();
 
-  const server = express();
+  await nextApp.prepare();
+
+  const app = express();
 
   // middleware
-  server.use(express.json());
-  server.use(cors({ credentials: true, origin: true }));
+  app.use(express.json());
+  app.use(cors({ credentials: true, origin: true }));
 
   // telegram bot webhook, telegraf bot
-  server.use(SECRET_PATH, (req, res) => bot.handleUpdate(req.body, res));
+  app.use(SECRET_PATH, (req, res) => bot.handleUpdate(req.body, res));
 
   const schema = await buildSchema({
     resolvers,
   });
   const apolloServer = new ApolloServer({
     schema,
-    context: ({
-      req,
-      res,
-    }: {
-      req: Express.Request;
-      res: Express.Response;
-    }) => ({
-      req,
-      res,
-      // TODO: Handle user/sessions here
-      // user: req.user,
-    }),
+    context({ req, res }) {
+      return {
+        req,
+        res,
+        // TODO: Handle user/sessions here
+        // user: req.user,
+      };
+    },
   });
   apolloServer.applyMiddleware({
-    app: server,
+    app,
     cors: false,
     path: '/graphql',
   });
 
   // client, next.js
-  server.all('*', (req, res) => handle(req, res));
+  app.all('*', (req, res) => nextHandler(req, res));
 
-  server.listen(port, () => {
+  app.listen(port, () => {
     console.log(`> Ready on http://localhost:${port}`);
   });
 }
