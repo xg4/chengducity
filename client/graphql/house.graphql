@@ -1,0 +1,42 @@
+query houses {
+  houses {
+    uuid
+    region
+    name
+    details
+    number
+    starts_at
+    ends_at
+    status
+  }
+}
+
+query recordsCount {
+  recordsCount
+}
+
+query yearOfHouses($year: Int!) {
+  yearOfHouses(year: $year) {
+    uuid
+    region
+    name
+    details
+    number
+    starts_at
+    ends_at
+    status
+  }
+}
+
+mutation pullHouses {
+  pullHouses {
+    uuid
+    region
+    name
+    details
+    number
+    starts_at
+    ends_at
+    status
+  }
+}

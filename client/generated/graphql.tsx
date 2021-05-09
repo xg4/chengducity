@@ -1,11 +1,14 @@
 import { gql } from '@apollo/client';
-import * as ApolloReactCommon from '@apollo/client';
-import * as ApolloReactHooks from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-const defaultOptions =  {}
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
+  { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
+  { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions = {};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -34,7 +37,6 @@ export type Mutation = {
   pushMessage: Scalars['Boolean'];
 };
 
-
 export type MutationPushMessageArgs = {
   data: PushMessageInputs;
 };
@@ -53,79 +55,96 @@ export type Query = {
   years: Array<Scalars['String']>;
 };
 
-
 export type QueryYearOfHousesArgs = {
   year: Scalars['Int'];
 };
 
-export type HousesQueryVariables = Exact<{ [key: string]: never; }>;
+export type HousesQueryVariables = Exact<{ [key: string]: never }>;
 
+export type HousesQuery = { __typename?: 'Query' } & {
+  houses: Array<
+    { __typename?: 'House' } & Pick<
+      House,
+      | 'uuid'
+      | 'region'
+      | 'name'
+      | 'details'
+      | 'number'
+      | 'starts_at'
+      | 'ends_at'
+      | 'status'
+    >
+  >;
+};
 
-export type HousesQuery = (
-  { __typename?: 'Query' }
-  & { houses: Array<(
-    { __typename?: 'House' }
-    & Pick<House, 'uuid' | 'region' | 'name' | 'details' | 'number' | 'starts_at' | 'ends_at' | 'status'>
-  )> }
-);
+export type RecordsCountQueryVariables = Exact<{ [key: string]: never }>;
 
-export type RecordsCountQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type RecordsCountQuery = (
-  { __typename?: 'Query' }
-  & Pick<Query, 'recordsCount'>
-);
+export type RecordsCountQuery = { __typename?: 'Query' } & Pick<
+  Query,
+  'recordsCount'
+>;
 
 export type YearOfHousesQueryVariables = Exact<{
   year: Scalars['Int'];
 }>;
 
+export type YearOfHousesQuery = { __typename?: 'Query' } & {
+  yearOfHouses: Array<
+    { __typename?: 'House' } & Pick<
+      House,
+      | 'uuid'
+      | 'region'
+      | 'name'
+      | 'details'
+      | 'number'
+      | 'starts_at'
+      | 'ends_at'
+      | 'status'
+    >
+  >;
+};
 
-export type YearOfHousesQuery = (
-  { __typename?: 'Query' }
-  & { yearOfHouses: Array<(
-    { __typename?: 'House' }
-    & Pick<House, 'uuid' | 'region' | 'name' | 'details' | 'number' | 'starts_at' | 'ends_at' | 'status'>
-  )> }
-);
+export type PullHousesMutationVariables = Exact<{ [key: string]: never }>;
 
-export type PullHousesMutationVariables = Exact<{ [key: string]: never; }>;
-
-
-export type PullHousesMutation = (
-  { __typename?: 'Mutation' }
-  & { pullHouses: Array<(
-    { __typename?: 'House' }
-    & Pick<House, 'uuid' | 'region' | 'name' | 'details' | 'number' | 'starts_at' | 'ends_at' | 'status'>
-  )> }
-);
+export type PullHousesMutation = { __typename?: 'Mutation' } & {
+  pullHouses: Array<
+    { __typename?: 'House' } & Pick<
+      House,
+      | 'uuid'
+      | 'region'
+      | 'name'
+      | 'details'
+      | 'number'
+      | 'starts_at'
+      | 'ends_at'
+      | 'status'
+    >
+  >;
+};
 
 export type PushMessageMutationVariables = Exact<{
   data: PushMessageInputs;
 }>;
 
-
-export type PushMessageMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'pushMessage'>
-);
-
+export type PushMessageMutation = { __typename?: 'Mutation' } & Pick<
+  Mutation,
+  'pushMessage'
+>;
 
 export const HousesDocument = gql`
-    query houses {
-  houses {
-    uuid
-    region
-    name
-    details
-    number
-    starts_at
-    ends_at
-    status
+  query houses {
+    houses {
+      uuid
+      region
+      name
+      details
+      number
+      starts_at
+      ends_at
+      status
+    }
   }
-}
-    `;
+`;
 
 /**
  * __useHousesQuery__
@@ -142,22 +161,35 @@ export const HousesDocument = gql`
  *   },
  * });
  */
-export function useHousesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<HousesQuery, HousesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return ApolloReactHooks.useQuery<HousesQuery, HousesQueryVariables>(HousesDocument, options);
-      }
-export function useHousesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<HousesQuery, HousesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useLazyQuery<HousesQuery, HousesQueryVariables>(HousesDocument, options);
-        }
+export function useHousesQuery(
+  baseOptions?: Apollo.QueryHookOptions<HousesQuery, HousesQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<HousesQuery, HousesQueryVariables>(
+    HousesDocument,
+    options,
+  );
+}
+export function useHousesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<HousesQuery, HousesQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<HousesQuery, HousesQueryVariables>(
+    HousesDocument,
+    options,
+  );
+}
 export type HousesQueryHookResult = ReturnType<typeof useHousesQuery>;
 export type HousesLazyQueryHookResult = ReturnType<typeof useHousesLazyQuery>;
-export type HousesQueryResult = ApolloReactCommon.QueryResult<HousesQuery, HousesQueryVariables>;
+export type HousesQueryResult = Apollo.QueryResult<
+  HousesQuery,
+  HousesQueryVariables
+>;
 export const RecordsCountDocument = gql`
-    query recordsCount {
-  recordsCount
-}
-    `;
+  query recordsCount {
+    recordsCount
+  }
+`;
 
 /**
  * __useRecordsCountQuery__
@@ -174,31 +206,54 @@ export const RecordsCountDocument = gql`
  *   },
  * });
  */
-export function useRecordsCountQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<RecordsCountQuery, RecordsCountQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return ApolloReactHooks.useQuery<RecordsCountQuery, RecordsCountQueryVariables>(RecordsCountDocument, options);
-      }
-export function useRecordsCountLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<RecordsCountQuery, RecordsCountQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useLazyQuery<RecordsCountQuery, RecordsCountQueryVariables>(RecordsCountDocument, options);
-        }
-export type RecordsCountQueryHookResult = ReturnType<typeof useRecordsCountQuery>;
-export type RecordsCountLazyQueryHookResult = ReturnType<typeof useRecordsCountLazyQuery>;
-export type RecordsCountQueryResult = ApolloReactCommon.QueryResult<RecordsCountQuery, RecordsCountQueryVariables>;
-export const YearOfHousesDocument = gql`
-    query yearOfHouses($year: Int!) {
-  yearOfHouses(year: $year) {
-    uuid
-    region
-    name
-    details
-    number
-    starts_at
-    ends_at
-    status
-  }
+export function useRecordsCountQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    RecordsCountQuery,
+    RecordsCountQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<RecordsCountQuery, RecordsCountQueryVariables>(
+    RecordsCountDocument,
+    options,
+  );
 }
-    `;
+export function useRecordsCountLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    RecordsCountQuery,
+    RecordsCountQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<RecordsCountQuery, RecordsCountQueryVariables>(
+    RecordsCountDocument,
+    options,
+  );
+}
+export type RecordsCountQueryHookResult = ReturnType<
+  typeof useRecordsCountQuery
+>;
+export type RecordsCountLazyQueryHookResult = ReturnType<
+  typeof useRecordsCountLazyQuery
+>;
+export type RecordsCountQueryResult = Apollo.QueryResult<
+  RecordsCountQuery,
+  RecordsCountQueryVariables
+>;
+export const YearOfHousesDocument = gql`
+  query yearOfHouses($year: Int!) {
+    yearOfHouses(year: $year) {
+      uuid
+      region
+      name
+      details
+      number
+      starts_at
+      ends_at
+      status
+    }
+  }
+`;
 
 /**
  * __useYearOfHousesQuery__
@@ -216,32 +271,58 @@ export const YearOfHousesDocument = gql`
  *   },
  * });
  */
-export function useYearOfHousesQuery(baseOptions: ApolloReactHooks.QueryHookOptions<YearOfHousesQuery, YearOfHousesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return ApolloReactHooks.useQuery<YearOfHousesQuery, YearOfHousesQueryVariables>(YearOfHousesDocument, options);
-      }
-export function useYearOfHousesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<YearOfHousesQuery, YearOfHousesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return ApolloReactHooks.useLazyQuery<YearOfHousesQuery, YearOfHousesQueryVariables>(YearOfHousesDocument, options);
-        }
-export type YearOfHousesQueryHookResult = ReturnType<typeof useYearOfHousesQuery>;
-export type YearOfHousesLazyQueryHookResult = ReturnType<typeof useYearOfHousesLazyQuery>;
-export type YearOfHousesQueryResult = ApolloReactCommon.QueryResult<YearOfHousesQuery, YearOfHousesQueryVariables>;
-export const PullHousesDocument = gql`
-    mutation pullHouses {
-  pullHouses {
-    uuid
-    region
-    name
-    details
-    number
-    starts_at
-    ends_at
-    status
-  }
+export function useYearOfHousesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    YearOfHousesQuery,
+    YearOfHousesQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<YearOfHousesQuery, YearOfHousesQueryVariables>(
+    YearOfHousesDocument,
+    options,
+  );
 }
-    `;
-export type PullHousesMutationFn = ApolloReactCommon.MutationFunction<PullHousesMutation, PullHousesMutationVariables>;
+export function useYearOfHousesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    YearOfHousesQuery,
+    YearOfHousesQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<YearOfHousesQuery, YearOfHousesQueryVariables>(
+    YearOfHousesDocument,
+    options,
+  );
+}
+export type YearOfHousesQueryHookResult = ReturnType<
+  typeof useYearOfHousesQuery
+>;
+export type YearOfHousesLazyQueryHookResult = ReturnType<
+  typeof useYearOfHousesLazyQuery
+>;
+export type YearOfHousesQueryResult = Apollo.QueryResult<
+  YearOfHousesQuery,
+  YearOfHousesQueryVariables
+>;
+export const PullHousesDocument = gql`
+  mutation pullHouses {
+    pullHouses {
+      uuid
+      region
+      name
+      details
+      number
+      starts_at
+      ends_at
+      status
+    }
+  }
+`;
+export type PullHousesMutationFn = Apollo.MutationFunction<
+  PullHousesMutation,
+  PullHousesMutationVariables
+>;
 
 /**
  * __usePullHousesMutation__
@@ -259,19 +340,35 @@ export type PullHousesMutationFn = ApolloReactCommon.MutationFunction<PullHouses
  *   },
  * });
  */
-export function usePullHousesMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<PullHousesMutation, PullHousesMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return ApolloReactHooks.useMutation<PullHousesMutation, PullHousesMutationVariables>(PullHousesDocument, options);
-      }
-export type PullHousesMutationHookResult = ReturnType<typeof usePullHousesMutation>;
-export type PullHousesMutationResult = ApolloReactCommon.MutationResult<PullHousesMutation>;
-export type PullHousesMutationOptions = ApolloReactCommon.BaseMutationOptions<PullHousesMutation, PullHousesMutationVariables>;
-export const PushMessageDocument = gql`
-    mutation pushMessage($data: PushMessageInputs!) {
-  pushMessage(data: $data)
+export function usePullHousesMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    PullHousesMutation,
+    PullHousesMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<PullHousesMutation, PullHousesMutationVariables>(
+    PullHousesDocument,
+    options,
+  );
 }
-    `;
-export type PushMessageMutationFn = ApolloReactCommon.MutationFunction<PushMessageMutation, PushMessageMutationVariables>;
+export type PullHousesMutationHookResult = ReturnType<
+  typeof usePullHousesMutation
+>;
+export type PullHousesMutationResult = Apollo.MutationResult<PullHousesMutation>;
+export type PullHousesMutationOptions = Apollo.BaseMutationOptions<
+  PullHousesMutation,
+  PullHousesMutationVariables
+>;
+export const PushMessageDocument = gql`
+  mutation pushMessage($data: PushMessageInputs!) {
+    pushMessage(data: $data)
+  }
+`;
+export type PushMessageMutationFn = Apollo.MutationFunction<
+  PushMessageMutation,
+  PushMessageMutationVariables
+>;
 
 /**
  * __usePushMessageMutation__
@@ -290,10 +387,33 @@ export type PushMessageMutationFn = ApolloReactCommon.MutationFunction<PushMessa
  *   },
  * });
  */
-export function usePushMessageMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<PushMessageMutation, PushMessageMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return ApolloReactHooks.useMutation<PushMessageMutation, PushMessageMutationVariables>(PushMessageDocument, options);
-      }
-export type PushMessageMutationHookResult = ReturnType<typeof usePushMessageMutation>;
-export type PushMessageMutationResult = ApolloReactCommon.MutationResult<PushMessageMutation>;
-export type PushMessageMutationOptions = ApolloReactCommon.BaseMutationOptions<PushMessageMutation, PushMessageMutationVariables>;
+export function usePushMessageMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    PushMessageMutation,
+    PushMessageMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<PushMessageMutation, PushMessageMutationVariables>(
+    PushMessageDocument,
+    options,
+  );
+}
+export type PushMessageMutationHookResult = ReturnType<
+  typeof usePushMessageMutation
+>;
+export type PushMessageMutationResult = Apollo.MutationResult<PushMessageMutation>;
+export type PushMessageMutationOptions = Apollo.BaseMutationOptions<
+  PushMessageMutation,
+  PushMessageMutationVariables
+>;
+
+export interface PossibleTypesResultData {
+  possibleTypes: {
+    [key: string]: string[];
+  };
+}
+const result: PossibleTypesResultData = {
+  possibleTypes: {},
+};
+export default result;

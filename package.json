@@ -29,7 +29,8 @@
     "build": "next build ./client",
     "start": "cross-env NODE_ENV=production npm run serve",
     "pretty": "prettier --write client/**/*.ts* server/**/*.ts",
-    "gen": "graphql-codegen --config codegen.js"
+    "gen": "graphql-codegen --config codegen.yml",
+    "gen:dev": "yarn gen --watch"
   },
   "husky": {
     "hooks": {
@@ -83,6 +84,7 @@
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^1.21.4",
+    "@graphql-codegen/fragment-matcher": "^2.0.1",
     "@graphql-codegen/introspection": "^1.18.2",
     "@graphql-codegen/typescript": "^1.22.0",
     "@graphql-codegen/typescript-operations": "^1.17.16",

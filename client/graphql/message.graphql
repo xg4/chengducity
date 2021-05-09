@@ -1,0 +1,3 @@
+mutation pushMessage($data: PushMessageInputs!) {
+  pushMessage(data: $data)
+}
