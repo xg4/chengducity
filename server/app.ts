@@ -17,7 +17,7 @@ const port = process.env.PORT || 3000;
 const dev = process.env.NODE_ENV !== 'production';
 
 const nextApp = next({ dev, dir: join(process.cwd(), './client') });
-const nextHandler = nextApp.getRequestHandler();
+const handle = nextApp.getRequestHandler();
 
 async function main() {
   // connect database
@@ -55,7 +55,7 @@ async function main() {
   });
 
   // client, next.js
-  app.all('*', (req, res) => nextHandler(req, res));
+  app.all('*', (req, res) => handle(req, res));
 
   app.listen(port, () => {
     console.log(`> Ready on http://localhost:${port}`);
