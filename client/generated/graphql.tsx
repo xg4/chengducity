@@ -36,17 +36,6 @@ export type House = {
 export type Mutation = {
   __typename?: 'Mutation';
   pullHouses: Array<House>;
-  pushMessage: Scalars['Boolean'];
-};
-
-export type MutationPushMessageArgs = {
-  data: PushMessageInputs;
-};
-
-export type PushMessageInputs = {
-  token: Scalars['String'];
-  content: Scalars['String'];
-  type?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -123,15 +112,6 @@ export type PullHousesMutation = { __typename?: 'Mutation' } & {
     >
   >;
 };
-
-export type PushMessageMutationVariables = Exact<{
-  data: PushMessageInputs;
-}>;
-
-export type PushMessageMutation = { __typename?: 'Mutation' } & Pick<
-  Mutation,
-  'pushMessage'
->;
 
 export const HousesDocument = gql`
   query houses {
@@ -361,53 +341,6 @@ export type PullHousesMutationResult = Apollo.MutationResult<PullHousesMutation>
 export type PullHousesMutationOptions = Apollo.BaseMutationOptions<
   PullHousesMutation,
   PullHousesMutationVariables
->;
-export const PushMessageDocument = gql`
-  mutation pushMessage($data: PushMessageInputs!) {
-    pushMessage(data: $data)
-  }
-`;
-export type PushMessageMutationFn = Apollo.MutationFunction<
-  PushMessageMutation,
-  PushMessageMutationVariables
->;
-
-/**
- * __usePushMessageMutation__
- *
- * To run a mutation, you first call `usePushMessageMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `usePushMessageMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [pushMessageMutation, { data, loading, error }] = usePushMessageMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
-export function usePushMessageMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    PushMessageMutation,
-    PushMessageMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<PushMessageMutation, PushMessageMutationVariables>(
-    PushMessageDocument,
-    options,
-  );
-}
-export type PushMessageMutationHookResult = ReturnType<
-  typeof usePushMessageMutation
->;
-export type PushMessageMutationResult = Apollo.MutationResult<PushMessageMutation>;
-export type PushMessageMutationOptions = Apollo.BaseMutationOptions<
-  PushMessageMutation,
-  PushMessageMutationVariables
 >;
 
 export interface PossibleTypesResultData {
