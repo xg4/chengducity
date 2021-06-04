@@ -8,7 +8,7 @@ import pkg from '../../package.json';
 
 const BOT_TOKEN = process.env.BOT_TOKEN!;
 const SECRET_PATH = process.env.SECRET_PATH!;
-const BASE_URL = process.env.BASE_URL!;
+const SERVER_URL = process.env.SERVER_URL!;
 
 export const bot = new Telegraf(BOT_TOKEN);
 
@@ -142,4 +142,4 @@ bot.catch((err: any) => {
   console.error('[bot] err:', err);
 });
 
-bot.telegram.setWebhook(BASE_URL + SECRET_PATH);
+bot.telegram.setWebhook(SERVER_URL + SECRET_PATH);
