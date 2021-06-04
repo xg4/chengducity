@@ -1,14 +1,14 @@
 overwrite: true
-schema: 'http://localhost:3000/graphql'
-documents: ['./client/graphql/*.graphql']
+schema: 'http://localhost:5000/graphql'
+documents: ['./graphql/*.graphql']
 generates:
-  client/generated/graphql.tsx:
+  ./generated/graphql.tsx:
     plugins:
       - 'typescript'
       - 'typescript-operations'
       - 'typescript-react-apollo'
       - 'fragment-matcher'
-  client/graphql.schema.json:
+  ./graphql.schema.json:
     plugins:
       - 'introspection'
 hooks:

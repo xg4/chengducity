@@ -14,8 +14,10 @@ dayjs.extend(weekYear);
 dayjs.extend(weekOfYear);
 dayjs.extend(quarterOfYear);
 
+const serverUri = process.env.APOLLO_SERVER || 'http://localhost:5000/graphql';
+
 const client = new ApolloClient({
-  uri: '/graphql',
+  uri: serverUri,
   cache: new InMemoryCache(),
 });
 
