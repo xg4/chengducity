@@ -1,4 +1,7 @@
 module.exports = {
+  env: {
+    APOLLO_SERVER: process.env.APOLLO_SERVER,
+  },
   future: {
     webpack5: true,
   },
