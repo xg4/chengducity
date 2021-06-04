@@ -4,9 +4,9 @@ query houses {
     region
     name
     details
-    number
-    starts_at
-    ends_at
+    quantity
+    startedAt
+    finishedAt
     status
   }
 }
@@ -21,9 +21,9 @@ query yearOfHouses($year: Int!) {
     region
     name
     details
-    number
-    starts_at
-    ends_at
+    quantity
+    startedAt
+    finishedAt
     status
   }
 }
@@ -34,9 +34,9 @@ mutation pullHouses {
     region
     name
     details
-    number
-    starts_at
-    ends_at
+    quantity
+    startedAt
+    finishedAt
     status
   }
 }

@@ -1,4 +1,5 @@
 import { Card, Table } from 'antd';
+import dayjs from 'dayjs';
 import { House } from '../generated/graphql';
 
 interface TableCardProps {
@@ -17,15 +18,21 @@ const columns = [
   },
   {
     title: '住房套数',
-    dataIndex: 'number',
+    dataIndex: 'quantity',
   },
   {
     title: '登记开始时间',
-    dataIndex: 'starts_at',
+    dataIndex: 'startedAt',
+    render(item: any) {
+      return dayjs(item).format('YYYY-MM-DD HH:mm:ss');
+    },
   },
   {
     title: '登记结束时间',
-    dataIndex: 'ends_at',
+    dataIndex: 'finishedAt',
+    render(item: any) {
+      return dayjs(item).format('YYYY-MM-DD HH:mm:ss');
+    },
   },
   {
     title: '报名状态',

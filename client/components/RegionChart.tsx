@@ -15,7 +15,7 @@ export default function RegionChart({
     return [
       {
         region: region,
-        value: sumBy(houses, (item) => Number(item.number)),
+        value: sumBy(houses, 'quantity'),
         name: '房源数',
       },
       {

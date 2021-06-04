@@ -1,5 +1,4 @@
 import dayjs from 'dayjs';
-import { BOT_TOKEN, SECRET_PATH, WEBHOOK } from 'server/config';
 import { House, User } from 'server/models';
 import { composeContent } from 'server/util';
 import { Context, Telegraf } from 'telegraf';
@@ -7,16 +6,20 @@ import { MoreThan } from 'typeorm';
 import { v4 } from 'uuid';
 import pkg from '../../package.json';
 
+const BOT_TOKEN = process.env.BOT_TOKEN!;
+const SECRET_PATH = process.env.SECRET_PATH!;
+const BASE_URL = process.env.BASE_URL!;
+
 export const bot = new Telegraf(BOT_TOKEN);
 
 const ERROR_MSG = 'Something wrong. Please contact xingor4@gmail.com.';
 
 const controller = {
   async token(ctx: Context) {
-    const telegram_chat_id = ctx.chat?.id;
+    const telegramChatId = ctx.chat?.id;
 
     try {
-      const user = await User.findOne({ telegram_chat_id });
+      const user = await User.findOne({ telegramChatId });
       if (user) {
         await ctx.reply(`Your token is already there: ${user.token}`);
         return;
@@ -25,7 +28,7 @@ const controller = {
       // generate new token
       const token = v4();
       const newUser = User.create({
-        telegram_chat_id,
+        telegramChatId,
         token,
       });
       await newUser.save();
@@ -37,11 +40,11 @@ const controller = {
     }
   },
   async show(ctx: Context) {
-    const telegram_chat_id = ctx.chat?.id;
+    const telegramChatId = ctx.chat?.id;
 
     try {
       const user = await User.findOne({
-        telegram_chat_id,
+        telegramChatId,
       });
 
       if (!user) {
@@ -56,11 +59,11 @@ const controller = {
     }
   },
   async revoke(ctx: Context) {
-    const telegram_chat_id = ctx.chat?.id;
+    const telegramChatId = ctx.chat?.id;
 
     try {
       const user = await User.findOne({
-        telegram_chat_id,
+        telegramChatId,
       });
       if (!user) {
         await ctx.reply(`You don't have any token`);
@@ -77,7 +80,7 @@ const controller = {
   async now(ctx: Context) {
     try {
       const houses = await House.find({
-        ends_at: MoreThan(dayjs().format('YYYY-MM-DD HH:mm:ss')),
+        finishedAt: MoreThan(dayjs().format('YYYY-MM-DD HH:mm:ss')),
       });
 
       await Promise.all(
@@ -139,4 +142,4 @@ bot.catch((err: any) => {
   console.error('[bot] err:', err);
 });
 
-bot.telegram.setWebhook(WEBHOOK + SECRET_PATH);
+bot.telegram.setWebhook(BASE_URL + SECRET_PATH);

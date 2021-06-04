@@ -13,7 +13,7 @@ export default function MonthChart({ monthOfData, tabKey }: MonthChartProps) {
     {
       name: '房源数',
       month: key,
-      value: sumBy(houses, (item) => Number(item.number)),
+      value: sumBy(houses, 'quantity'),
     },
     {
       name: '楼盘数',

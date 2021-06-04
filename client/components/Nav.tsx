@@ -22,7 +22,7 @@ export default function Nav({ links }: NavProps) {
             if (!newHouses.length) {
               return existingHouses;
             }
-            return uniqBy([...existingHouses, ...newHouses], 'uuid');
+            return uniqBy([...newHouses, ...existingHouses], 'uuid');
           },
           recordsCount(oldRecords) {
             return oldRecords ? oldRecords + 1 : 1;

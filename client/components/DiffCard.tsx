@@ -19,9 +19,9 @@ export default function DiffCard({
   const prevNum = prevData.length;
   const diffNum = currentNum - prevNum;
 
-  const currentNum2 = sumBy(currentData, (item) => Number(item.number));
+  const currentNum2 = sumBy(currentData, 'quantity');
 
-  const prevNum2 = sumBy(prevData, (item) => Number(item.number));
+  const prevNum2 = sumBy(prevData, 'quantity');
   const diffNum2 = currentNum2 - prevNum2;
 
   return (

@@ -1,21 +1,21 @@
 import cheerio from 'cheerio';
 import dayjs from 'dayjs';
 import fetch from 'node-fetch';
-import { Record } from 'server/models';
-import { delay } from 'server/util';
+import { PullRequest } from 'server/models';
+import { delay, md5 } from 'server/util';
 
 const pageSize = 10;
 
-export interface HouseSource {
+export interface RemoteHouses {
   uuid: string;
   region: string;
   name: string;
   details: string;
-  number: string;
-  starts_at: string;
-  ends_at: string;
+  quantity: number;
+  startedAt: Date;
+  finishedAt: Date;
   status: string;
-  source: string;
+  hash: string;
 }
 
 type PullType = 'first' | 'recent' | 'all';
@@ -27,14 +27,14 @@ async function _pull(page = 1, type: PullType = 'recent') {
   const currentList = dataSource.map(filterData);
 
   const isRecent = currentList.every(
-    (item) => dayjs().diff(item.ends_at, 'month') === 0,
+    (item) => dayjs().diff(item.finishedAt, 'month') === 0,
   );
 
   if (type === 'first') {
     return currentList;
   }
 
-  let list: HouseSource[] = [];
+  let list: RemoteHouses[] = [];
 
   if (isRecent && type === 'recent') {
     await delay(1 * 1e3);
@@ -52,7 +52,7 @@ async function _pull(page = 1, type: PullType = 'recent') {
 }
 
 export async function pull(page = 1, type: PullType = 'recent') {
-  const record = await Record.findOne({
+  const record = await PullRequest.findOne({
     where: {
       type,
     },
@@ -62,20 +62,20 @@ export async function pull(page = 1, type: PullType = 'recent') {
   });
 
   if (record) {
-    if (type === 'first' && dayjs().diff(record.created_at, 'minute') === 0) {
+    if (type === 'first' && dayjs().diff(record.createdAt, 'minute') === 0) {
       throw new Error(`pull houses too fast, ${type}`);
     }
-    if (type === 'recent' && dayjs().diff(record.created_at, 'hour') === 0) {
+    if (type === 'recent' && dayjs().diff(record.createdAt, 'hour') === 0) {
       throw new Error(`pull houses too fast, ${type}`);
     }
-    if (type === 'all' && dayjs().diff(record.created_at, 'day') === 0) {
+    if (type === 'all' && dayjs().diff(record.createdAt, 'day') === 0) {
       throw new Error(`pull houses too fast, ${type}`);
     }
   }
 
   const houses = await _pull(page, type);
 
-  const newRecord = Record.create({ type });
+  const newRecord = PullRequest.create({ type });
   await newRecord.save();
 
   return houses;
@@ -120,25 +120,25 @@ export function filterData(data: string[]) {
     name,
     ______,
     details,
-    number,
+    quantity,
     __,
-    starts_at,
-    ends_at,
+    startedAt,
+    finishedAt,
     ___,
     ____,
     _____,
     status,
   ] = data;
-  const source = data.join('|');
+  const hash = md5(data.join());
   return {
     uuid,
     region,
     name,
     details,
-    number,
-    starts_at,
-    ends_at,
+    quantity: Number(quantity),
+    startedAt: dayjs.tz(startedAt, 'Asia/Shanghai').toDate(),
+    finishedAt: dayjs.tz(finishedAt, 'Asia/Shanghai').toDate(),
     status,
-    source,
+    hash,
   };
 }

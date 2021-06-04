@@ -9,17 +9,19 @@ export function useMetrics() {
   const key = data.map((item) => item.uuid).join();
 
   return useMemo(() => {
-    const yearOfData = groupBy(data, (item) => dayjs(item.ends_at).get('year'));
+    const yearOfData = groupBy(data, (item) =>
+      dayjs(item.finishedAt).get('year'),
+    );
     const monthOfData = groupBy(data, (item) =>
-      dayjs(item.ends_at).format('YYYY-MM'),
+      dayjs(item.finishedAt).format('YYYY-MM'),
     );
     const quarterOfData = groupBy(data, (item) => {
-      const d = dayjs(item.ends_at);
+      const d = dayjs(item.finishedAt);
       return `${d.get('year')}-${d.quarter()}`;
     });
 
     const weekOfData = groupBy(data, (item) => {
-      const d = dayjs(item.ends_at);
+      const d = dayjs(item.finishedAt);
       return `${d.weekYear()}-${d.week()}`;
     });
 

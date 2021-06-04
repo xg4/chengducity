@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 /** @type {import('typeorm').ConnectionOptions} */
 module.exports = {
   type: 'postgres',

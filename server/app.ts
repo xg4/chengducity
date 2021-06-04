@@ -1,17 +1,25 @@
+require('dotenv').config();
+
 import { ApolloServer } from 'apollo-server-express';
-import cors from 'cors';
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 import express from 'express';
 import next from 'next';
 import { join } from 'path';
 import 'reflect-metadata';
 import { buildSchema } from 'type-graphql';
 import { createConnection } from 'typeorm';
-import { SECRET_PATH } from './config';
 import { bot, oneDayOfJob, oneHourOfJob } from './lib';
 import { resolvers } from './resolvers';
 
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 oneDayOfJob.start();
 oneHourOfJob.start();
+
+const SECRET_PATH = process.env.SECRET_PATH!;
 
 const port = process.env.PORT || 3000;
 const dev = process.env.NODE_ENV !== 'production';
@@ -29,7 +37,6 @@ async function main() {
 
   // middleware
   app.use(express.json());
-  app.use(cors({ credentials: true, origin: true }));
 
   // telegram bot webhook, telegraf bot
   app.use(SECRET_PATH, (req, res) => bot.handleUpdate(req.body, res));
@@ -50,7 +57,6 @@ async function main() {
   });
   apolloServer.applyMiddleware({
     app,
-    cors: false,
     path: '/graphql',
   });
 

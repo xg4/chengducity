@@ -23,10 +23,10 @@ export class MessageResolver {
     const user = await User.findOne({ token });
 
     if (!user) {
-      throw new Error(`no such token: ${token}`);
+      throw new Error(`Invalid token: ${token}`);
     }
 
-    const chatId = user.telegram_chat_id;
+    const chatId = user.telegramChatId;
 
     await bot.telegram.sendMessage(chatId, content, { parse_mode: type });
 

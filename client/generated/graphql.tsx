@@ -16,6 +16,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
+  DateTime: any;
 };
 
 export type House = {
@@ -24,11 +26,11 @@ export type House = {
   region: Scalars['String'];
   name: Scalars['String'];
   details: Scalars['String'];
-  number: Scalars['String'];
-  starts_at: Scalars['String'];
-  ends_at: Scalars['String'];
+  quantity: Scalars['Int'];
+  startedAt: Scalars['DateTime'];
+  finishedAt: Scalars['DateTime'];
   status: Scalars['String'];
-  source: Scalars['String'];
+  hash: Scalars['String'];
 };
 
 export type Mutation = {
@@ -69,9 +71,9 @@ export type HousesQuery = { __typename?: 'Query' } & {
       | 'region'
       | 'name'
       | 'details'
-      | 'number'
-      | 'starts_at'
-      | 'ends_at'
+      | 'quantity'
+      | 'startedAt'
+      | 'finishedAt'
       | 'status'
     >
   >;
@@ -96,9 +98,9 @@ export type YearOfHousesQuery = { __typename?: 'Query' } & {
       | 'region'
       | 'name'
       | 'details'
-      | 'number'
-      | 'starts_at'
-      | 'ends_at'
+      | 'quantity'
+      | 'startedAt'
+      | 'finishedAt'
       | 'status'
     >
   >;
@@ -114,9 +116,9 @@ export type PullHousesMutation = { __typename?: 'Mutation' } & {
       | 'region'
       | 'name'
       | 'details'
-      | 'number'
-      | 'starts_at'
-      | 'ends_at'
+      | 'quantity'
+      | 'startedAt'
+      | 'finishedAt'
       | 'status'
     >
   >;
@@ -138,9 +140,9 @@ export const HousesDocument = gql`
       region
       name
       details
-      number
-      starts_at
-      ends_at
+      quantity
+      startedAt
+      finishedAt
       status
     }
   }
@@ -247,9 +249,9 @@ export const YearOfHousesDocument = gql`
       region
       name
       details
-      number
-      starts_at
-      ends_at
+      quantity
+      startedAt
+      finishedAt
       status
     }
   }
@@ -312,9 +314,9 @@ export const PullHousesDocument = gql`
       region
       name
       details
-      number
-      starts_at
-      ends_at
+      quantity
+      startedAt
+      finishedAt
       status
     }
   }

@@ -1,4 +1,4 @@
-import { Field, ObjectType } from 'type-graphql';
+import { Field, Int, ObjectType } from 'type-graphql';
 import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
 
 @ObjectType()
@@ -20,23 +20,23 @@ export class House extends BaseEntity {
   @Column()
   details: string;
 
-  @Field(() => String)
+  @Field(() => Int)
   @Column()
-  number: string;
+  quantity: number;
 
-  @Field(() => String)
-  @Column()
-  starts_at: string;
+  @Field(() => Date)
+  @Column({ name: 'started_at', type: 'timestamp with time zone' })
+  startedAt: Date;
 
-  @Field(() => String)
-  @Column()
-  ends_at: string;
+  @Field(() => Date)
+  @Column({ name: 'finished_at', type: 'timestamp with time zone' })
+  finishedAt: Date;
 
   @Field(() => String)
   @Column()
   status: string;
 
   @Field(() => String)
-  @Column({ select: false })
-  source: string;
+  @Column()
+  hash: string;
 }

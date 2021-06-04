@@ -3,9 +3,9 @@ import { BaseModel } from './BaseModel';
 
 @Entity({ name: 'users' })
 export class User extends BaseModel {
-  @Column({ unique: true })
-  telegram_chat_id: number;
+  @Column({ name: 'telegram_chat_id', unique: true })
+  telegramChatId: number;
 
-  @Column()
-  token: string;
+  @Column({ nullable: true })
+  token?: string;
 }

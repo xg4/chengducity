@@ -25,7 +25,7 @@ export default function Home() {
 
   const dataSource = orderBy(
     houses,
-    ['ends_at', 'starts_at', 'uuid'],
+    ['finishedAt', 'startedAt', 'uuid'],
     ['desc', 'desc', 'desc'],
   );
 

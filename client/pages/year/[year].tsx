@@ -47,13 +47,13 @@ function RegionCard({ houses, className }: RegionCardProps) {
 
   const months = groupBy(
     houses,
-    (item) => dayjs(item.ends_at).month() + 1 + '月',
+    (item) => dayjs(item.finishedAt).month() + 1 + '月',
   );
 
   const data = Object.entries(months).map(([key, houses]) => ({
     month: key,
     length: houses.length,
-    number: sumBy(houses, (item) => Number(item.number)),
+    number: sumBy(houses, 'quantity'),
   }));
 
   return (
@@ -99,7 +99,7 @@ function RegionCard({ houses, className }: RegionCardProps) {
           dataSource={houses.map((item, index) => ({
             key: item.name + index,
             name: item.name,
-            value: +item.number,
+            value: item.quantity,
           }))}
         ></Rank>
       </div>
@@ -119,7 +119,7 @@ function Summary({
     ([region, houses]) => ({
       region,
       length: houses.length,
-      number: sumBy(houses, (item) => Number(item.number)),
+      number: sumBy(houses, 'quantity'),
     }),
   );
   const regionsChart = orderBy(
@@ -157,7 +157,7 @@ export default function Years() {
   const { yearOfData } = useMetrics();
   const houses = orderBy(
     yearOfData[year] ?? [],
-    ['ends_at', 'starts_at', 'uuid'],
+    ['finishedAt', 'startedAt', 'uuid'],
     ['asc', 'asc', 'asc'],
   );
 

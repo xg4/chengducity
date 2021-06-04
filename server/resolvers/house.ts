@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { groupBy } from 'lodash';
 import { bot, pull } from 'server/lib';
-import { House, Record, User } from 'server/models';
+import { House, PullRequest, User } from 'server/models';
 import { composeContent } from 'server/util';
 import { Arg, Int, Mutation, Query, Resolver } from 'type-graphql';
 import { Between } from 'typeorm';
@@ -18,7 +18,7 @@ export class HouseResolver {
     const date = dayjs(`${year}`);
     const houses = await House.find({
       where: {
-        ends_at: Between(
+        finishedAt: Between(
           date.format('YYYY-MM-DD HH:mm:ss'),
           date.add(1, 'year').format('YYYY-MM-DD HH:mm:ss'),
         ),
@@ -30,13 +30,13 @@ export class HouseResolver {
 
   @Query(() => Int)
   recordsCount() {
-    return Record.count();
+    return PullRequest.count();
   }
 
   @Query(() => [String])
   async years() {
-    const houses = await House.find({ select: ['ends_at'] });
-    const years = groupBy(houses, (item) => dayjs(item.ends_at).get('year'));
+    const houses = await House.find({ select: ['finishedAt'] });
+    const years = groupBy(houses, (item) => dayjs(item.finishedAt).get('year'));
     return Object.keys(years);
   }
 
@@ -66,7 +66,7 @@ export class HouseResolver {
         await Promise.all(
           sendHouses.map((house) =>
             bot.telegram.sendMessage(
-              user.telegram_chat_id,
+              user.telegramChatId,
               composeContent(house),
             ),
           ),

@@ -1,4 +1,4 @@
 export * from './BaseModel';
 export * from './House';
-export * from './Record';
+export * from './PullRequest';
 export * from './User';

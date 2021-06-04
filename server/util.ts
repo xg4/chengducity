@@ -3,7 +3,7 @@ import { House } from './models';
 
 export function md5(value: string) {
   const hash = crypto.createHash('md5');
-  return hash.update(value).digest('base64');
+  return hash.update(value).digest('hex');
 }
 
 export function delay(num: number) {
@@ -14,14 +14,14 @@ export function composeContent({
   region,
   name,
   details,
-  number,
-  starts_at,
-  ends_at,
+  quantity,
+  startedAt,
+  finishedAt,
   status,
 }: House) {
   return (
     `${region} ${name} ${status}\n\n` +
-    `${starts_at} ~ ${ends_at}\n\n` +
-    `${details}\n\n${number}套`
+    `${startedAt} ~ ${finishedAt}\n\n` +
+    `${details}\n\n${quantity}套`
   );
 }

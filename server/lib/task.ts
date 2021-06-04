@@ -3,9 +3,9 @@ import dayjs from 'dayjs';
 import { House, User } from 'server/models';
 import { composeContent } from 'server/util';
 import { bot } from './bot';
-import { HouseSource, pull } from './spider';
+import { pull, RemoteHouses } from './spider';
 
-async function diff(houses: HouseSource[]) {
+async function diff(houses: RemoteHouses[]) {
   const diffHouses = await Promise.all(
     houses.map(async (item) => {
       const savedHouse = await House.findOne({
@@ -29,10 +29,7 @@ async function diff(houses: HouseSource[]) {
     for (const user of users) {
       await Promise.all(
         sendHouses.map((house) =>
-          bot.telegram.sendMessage(
-            user.telegram_chat_id,
-            composeContent(house),
-          ),
+          bot.telegram.sendMessage(user.telegramChatId, composeContent(house)),
         ),
       );
     }
