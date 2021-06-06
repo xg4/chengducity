@@ -53,6 +53,7 @@ async function main() {
   });
   apolloServer.applyMiddleware({
     app,
+    cors: false,
     path: '/graphql',
   });
 

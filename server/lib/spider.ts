@@ -4,6 +4,8 @@ import fetch from 'node-fetch';
 import { PullRequest } from 'server/models';
 import { delay, md5 } from 'server/util';
 
+const debug = require('lib:spider');
+
 const pageSize = 10;
 
 export interface RemoteHouses {
@@ -21,7 +23,7 @@ export interface RemoteHouses {
 type PullType = 'first' | 'recent' | 'all';
 
 async function _pull(page = 1, type: PullType = 'recent') {
-  console.log('[spider] page ', page);
+  debug(`type ${type} page ${page}`);
   const dataSource = await spider(page);
 
   const currentList = dataSource.map(filterData);
@@ -105,7 +107,7 @@ export async function spider(pageNo: number) {
 
   // 数据可能发生改变
   if (trList[0] && trList[0][14] !== '查看') {
-    console.log('[spider]: Source data has changed');
+    debug('Source data has changed');
     throw new Error('Source data has changed');
   }
 

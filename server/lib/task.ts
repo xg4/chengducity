@@ -5,6 +5,8 @@ import { composeContent } from 'server/util';
 import { bot } from './bot';
 import { pull, RemoteHouses } from './spider';
 
+const debug = require('debug')('lib:task');
+
 async function diff(houses: RemoteHouses[]) {
   const diffHouses = await Promise.all(
     houses.map(async (item) => {
@@ -37,17 +39,17 @@ async function diff(houses: RemoteHouses[]) {
 }
 
 export const oneDayOfJob = new CronJob('0 0 0 * * *', async () => {
-  console.log('[oneDayOfJob] start ', dayjs().format('YYYY-MM-DD HH:mm:ss'));
+  debug('[oneDayOfJob] start ', dayjs().format('YYYY-MM-DD HH:mm:ss'));
   const houses = await pull(1, 'all');
-  console.log('[oneDayOfJob] end ', dayjs().format('YYYY-MM-DD HH:mm:ss'));
+  debug('[oneDayOfJob] end ', dayjs().format('YYYY-MM-DD HH:mm:ss'));
 
   await diff(houses);
 });
 
 export const oneHourOfJob = new CronJob('0 0 * * * *', async () => {
-  console.log('[oneHourOfJob] start ', dayjs().format('YYYY-MM-DD HH:mm:ss'));
+  debug('[oneHourOfJob] start ', dayjs().format('YYYY-MM-DD HH:mm:ss'));
   const houses = await pull(1, 'recent');
-  console.log('[oneHourOfJob] end ', dayjs().format('YYYY-MM-DD HH:mm:ss'));
+  debug('[oneHourOfJob] end ', dayjs().format('YYYY-MM-DD HH:mm:ss'));
 
   await diff(houses);
 });

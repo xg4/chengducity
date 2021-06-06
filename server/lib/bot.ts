@@ -6,6 +6,8 @@ import { MoreThan } from 'typeorm';
 import { v4 } from 'uuid';
 import pkg from '../../package.json';
 
+const debug = require('debug')('lib:bot');
+
 const BOT_TOKEN = process.env.BOT_TOKEN!;
 const SECRET_PATH = process.env.SECRET_PATH!;
 const SERVER_URL = process.env.SERVER_URL!;
@@ -35,7 +37,7 @@ const controller = {
 
       await ctx.reply(`Your token is now: ${token}`);
     } catch (err) {
-      console.log(err);
+      debug(err);
       await ctx.reply(ERROR_MSG);
     }
   },
@@ -54,7 +56,7 @@ const controller = {
 
       await ctx.reply(`Your current token is: ${user.token}`);
     } catch (err) {
-      console.log(err);
+      debug(err);
       await ctx.reply(ERROR_MSG);
     }
   },
@@ -73,7 +75,7 @@ const controller = {
       await user.remove();
       await ctx.reply('Done, revoke successfully');
     } catch (err) {
-      console.log(err);
+      debug(err);
       await ctx.reply(ERROR_MSG);
     }
   },
@@ -87,7 +89,7 @@ const controller = {
         houses.map((house) => ctx.reply(composeContent(house))),
       );
     } catch (err) {
-      console.log(err);
+      debug(err);
       await ctx.reply(ERROR_MSG);
     }
   },
@@ -139,7 +141,7 @@ const commands = [
 bot.telegram.setMyCommands(commands);
 
 bot.catch((err: any) => {
-  console.error('[bot] err:', err);
+  debug(err);
 });
 
 bot.telegram.setWebhook(SERVER_URL + SECRET_PATH);
