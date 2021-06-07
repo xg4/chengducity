@@ -1,5 +1,5 @@
 import { GithubOutlined, SyncOutlined } from '@ant-design/icons';
-import { Button, message, notification } from 'antd';
+import { Button, message, notification, Tooltip } from 'antd';
 import { uniqBy } from 'lodash';
 import { useCallback } from 'react';
 import {
@@ -64,6 +64,18 @@ export default function Nav({ links }: NavProps) {
         {recordsData ? (
           <span className="mr-2">累计查询：{recordsData.recordsCount}次</span>
         ) : null}
+
+        <Tooltip title="Telegram 订阅，有新房源或者房源状态发生变化时，进行推送">
+          <Button
+            className="mr-2"
+            type="link"
+            href="https://t.me/chengducitybot"
+            target="_blank"
+          >
+            订阅
+          </Button>
+        </Tooltip>
+
         <Button
           className="mr-2"
           type="link"
