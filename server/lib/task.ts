@@ -40,7 +40,7 @@ async function diff(houses: RemoteHouses[]) {
 
 export const oneDayOfJob = new CronJob('0 0 0 * * *', async () => {
   debug('[oneDayOfJob] start ', dayjs().format('YYYY-MM-DD HH:mm:ss'));
-  const houses = await pull(1, 'all');
+  const houses = await pull(1, 'month');
   debug('[oneDayOfJob] end ', dayjs().format('YYYY-MM-DD HH:mm:ss'));
 
   await diff(houses);
@@ -48,7 +48,7 @@ export const oneDayOfJob = new CronJob('0 0 0 * * *', async () => {
 
 export const oneHourOfJob = new CronJob('0 0 * * * *', async () => {
   debug('[oneHourOfJob] start ', dayjs().format('YYYY-MM-DD HH:mm:ss'));
-  const houses = await pull(1, 'recent');
+  const houses = await pull(1, 'day');
   debug('[oneHourOfJob] end ', dayjs().format('YYYY-MM-DD HH:mm:ss'));
 
   await diff(houses);

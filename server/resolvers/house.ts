@@ -8,6 +8,47 @@ import { Between } from 'typeorm';
 
 const debug = require('debug')('resolver:house');
 
+async function getPullRequestType() {
+  const monthRequest = await PullRequest.findOne({
+    where: {
+      type: 'month',
+    },
+    order: {
+      id: 'DESC',
+    },
+  });
+
+  if (!monthRequest || dayjs().diff(monthRequest.createdAt, 'week') !== 0) {
+    return 'month';
+  }
+
+  const weekRequest = await PullRequest.findOne({
+    where: {
+      type: 'week',
+    },
+    order: {
+      id: 'DESC',
+    },
+  });
+
+  if (!weekRequest || dayjs().diff(weekRequest.createdAt, 'day') !== 0) {
+    return 'week';
+  }
+
+  const dayRequest = await PullRequest.findOne({
+    where: {
+      type: 'day',
+    },
+    order: {
+      id: 'DESC',
+    },
+  });
+
+  if (!dayRequest || dayjs().diff(dayRequest.createdAt, 'minute') >= 5) {
+    return 'day';
+  }
+}
+
 @Resolver()
 export class HouseResolver {
   @Query(() => [House])
@@ -67,7 +108,18 @@ export class HouseResolver {
   @Mutation(() => [House])
   async pullHouses() {
     try {
-      const houses = await pull(1, 'first');
+      const type = await getPullRequestType();
+      if (!type) {
+        return [];
+      }
+      const houses = await pull(1, type);
+
+      const pullRequest = PullRequest.create({
+        type,
+        from: 'gql',
+      });
+
+      await pullRequest.save();
 
       const diffHouses = await Promise.all(
         houses.map(async (item) => {
@@ -77,7 +129,7 @@ export class HouseResolver {
 
           const house = House.create(item);
 
-          if (savedHouse?.status !== house.status) {
+          if (savedHouse?.hash !== house.hash) {
             return house.save();
           }
         }),

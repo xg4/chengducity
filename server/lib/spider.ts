@@ -1,10 +1,9 @@
 import cheerio from 'cheerio';
 import dayjs from 'dayjs';
 import fetch from 'node-fetch';
-import { PullRequest } from 'server/models';
 import { delay, md5 } from 'server/util';
 
-const debug = require('lib:spider');
+const debug = require('debug')('lib:spider');
 
 const pageSize = 10;
 
@@ -20,70 +19,60 @@ export interface RemoteHouses {
   hash: string;
 }
 
-type PullType = 'first' | 'recent' | 'all';
+type PullType = 'day' | 'week' | 'month' | 'all';
 
-async function _pull(page = 1, type: PullType = 'recent') {
-  debug(`type ${type} page ${page}`);
+export async function pull(
+  page = 1,
+  type: PullType = 'day',
+): Promise<RemoteHouses[]> {
+  debug(`type:${type} page:${page}`);
   const dataSource = await spider(page);
 
   const currentList = dataSource.map(filterData);
 
-  const isRecent = currentList.every(
-    (item) => dayjs().diff(item.finishedAt, 'month') === 0,
-  );
-
-  if (type === 'first') {
-    return currentList;
+  if (type === 'day') {
+    const isLatestDay = currentList.every(
+      (item) => dayjs().diff(item.finishedAt, 'day') === 0,
+    );
+    if (isLatestDay) {
+      await delay(1 * 1e3);
+      const nextList = await pull(page + 1, type);
+      return [...currentList, ...nextList];
+    }
   }
 
-  let list: RemoteHouses[] = [];
+  if (type === 'week') {
+    const isLatestWeek = currentList.every(
+      (item) => dayjs().diff(item.finishedAt, 'week') === 0,
+    );
+    if (isLatestWeek) {
+      await delay(1 * 1e3);
+      const nextList = await pull(page + 1, type);
+      return [...currentList, ...nextList];
+    }
+  }
 
-  if (isRecent && type === 'recent') {
+  if (type === 'month') {
+    const isLatestMonth = currentList.every(
+      (item) => dayjs().diff(item.finishedAt, 'month') === 0,
+    );
+    if (isLatestMonth) {
+      await delay(1 * 1e3);
+      const nextList = await pull(page + 1, type);
+      return [...currentList, ...nextList];
+    }
+  }
+
+  if (type === 'all' && currentList.length === pageSize) {
     await delay(1 * 1e3);
-    const nextList = await _pull(page + 1, type);
-    list = [...currentList, ...nextList];
+    const nextList = await pull(page + 1, type);
+    return [...currentList, ...nextList];
   }
 
-  if (currentList.length === pageSize && type === 'all') {
-    await delay(1 * 1e3);
-    const nextList = await _pull(page + 1, type);
-    list = [...currentList, ...nextList];
-  }
-
-  return list;
+  return currentList;
 }
 
-export async function pull(page = 1, type: PullType = 'recent') {
-  const record = await PullRequest.findOne({
-    where: {
-      type,
-    },
-    order: {
-      id: 'DESC',
-    },
-  });
-
-  if (record) {
-    if (type === 'first' && dayjs().diff(record.createdAt, 'minute') === 0) {
-      throw new Error(`pull houses too fast, ${type}`);
-    }
-    if (type === 'recent' && dayjs().diff(record.createdAt, 'hour') === 0) {
-      throw new Error(`pull houses too fast, ${type}`);
-    }
-    if (type === 'all' && dayjs().diff(record.createdAt, 'day') === 0) {
-      throw new Error(`pull houses too fast, ${type}`);
-    }
-  }
-
-  const houses = await _pull(page, type);
-
-  const newRecord = PullRequest.create({ type });
-  await newRecord.save();
-
-  return houses;
-}
-
-export async function spider(pageNo: number) {
+async function spider(pageNo: number) {
   const result = await fetch(
     `https://zw.cdzj.chengdu.gov.cn/lottery/accept/projectList?pageNo=${pageNo}`,
     {
@@ -114,7 +103,7 @@ export async function spider(pageNo: number) {
   return trList;
 }
 
-export function filterData(data: string[]) {
+function filterData(data: string[]) {
   const [
     uuid,
     _,
