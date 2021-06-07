@@ -22,9 +22,11 @@ export function composeContent({
 }: House) {
   return (
     `${region} ${name} ${status}\n\n` +
-    `${dayjs(startedAt).format('YYYY-MM-DD HH:mm:ss')} ~ ${dayjs(
-      finishedAt,
-    ).format('YYYY-MM-DD HH:mm:ss')}\n\n` +
+    `${dayjs
+      .tz(startedAt, 'Asia/Shanghai')
+      .format('YYYY-MM-DD HH:mm:ss')} ~ ${dayjs
+      .tz(finishedAt, 'Asia/Shanghai')
+      .format('YYYY-MM-DD HH:mm:ss')}\n\n` +
     `${details}\n\n${quantity}套`
   );
 }

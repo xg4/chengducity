@@ -35,7 +35,7 @@ async function main() {
   // telegram bot webhook, telegraf bot
   app.use(SECRET_PATH, (req, res) => bot.handleUpdate(req.body, res));
 
-  // app.use('/', (_, res) => res.redirect(process.env.CLIENT_URL!));
+  app.get('/', (_, res) => res.redirect(process.env.CLIENT_URL!));
 
   const schema = await buildSchema({
     resolvers,
