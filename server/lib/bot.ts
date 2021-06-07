@@ -85,6 +85,11 @@ const controller = {
         finishedAt: MoreThan(dayjs().format('YYYY-MM-DD HH:mm:ss')),
       });
 
+      if (!houses.length) {
+        ctx.reply('暂无正在报名的房源');
+        return;
+      }
+
       await Promise.all(
         houses.map((house) => ctx.reply(composeContent(house))),
       );
@@ -95,7 +100,7 @@ const controller = {
   },
 };
 
-bot.start(controller.token);
+bot.command('start', controller.token);
 
 bot.command('token', controller.token);
 
@@ -105,11 +110,7 @@ bot.command('show', controller.show);
 
 bot.command('now', controller.now);
 
-bot.command('image', (ctx) =>
-  ctx.replyWithPhoto({ url: 'https://picsum.photos/200/300/?random' }),
-);
-
-bot.help((ctx) => ctx.reply(`For more info, see: ${pkg.homepage}`));
+bot.command('help', (ctx) => ctx.reply(`For more info, see: ${pkg.homepage}`));
 
 const commands = [
   {
@@ -129,10 +130,6 @@ const commands = [
     description: '展示 token',
   },
   {
-    command: 'image',
-    description: '获取随机图片',
-  },
-  {
     command: 'help',
     description: '展示帮助信息',
   },
@@ -140,7 +137,7 @@ const commands = [
 
 bot.telegram.setMyCommands(commands);
 
-bot.catch((err: any) => {
+bot.catch((err) => {
   debug(err);
 });
 
